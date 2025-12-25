@@ -8,15 +8,16 @@ const nextConfig = {
   nx: {
     svgr: false,
   },
-  output: 'standalone',
+  output: 'export',
   reactStrictMode: true,
   transpilePackages: [
     '@sql2ai/ui-components',
     '@sql2ai/shared-types',
   ],
   images: {
-    domains: ['sql2.ai'],
+    unoptimized: true,
   },
+  trailingSlash: true,
 };
 
 const plugins = [withNx];

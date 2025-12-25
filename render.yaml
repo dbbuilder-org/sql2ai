@@ -2,28 +2,30 @@
 # https://render.com/docs/blueprint-spec
 
 services:
-  # Marketing Site (Next.js)
-  - type: web
+  # Marketing Site (Next.js Static Export)
+  - type: static_site
     name: sql2ai-site
-    runtime: node
-    region: oregon
-    plan: free
-    buildCommand: npm install && NODE_OPTIONS="--max-old-space-size=1536" npx nx build site --configuration=production && cp -r apps/site/public dist/apps/site/.next/standalone/apps/site/ && cp -r dist/apps/site/.next/static dist/apps/site/.next/standalone/apps/site/.next/
-    startCommand: node dist/apps/site/.next/standalone/apps/site/server.js
+    buildCommand: npm install && NODE_OPTIONS="--max-old-space-size=1536" npx nx build site --configuration=production
+    staticPublishPath: dist/apps/site
     envVars:
       - key: NODE_ENV
         value: production
       - key: NODE_OPTIONS
         value: --max-old-space-size=1536
-    rootDir: .
     buildFilter:
       paths:
         - apps/site/**
         - libs/**
         - package.json
         - nx.json
-    healthCheckPath: /
-    autoDeploy: true
-    # Custom domains configured manually in Render dashboard:
+    headers:
+      - path: /*
+        name: X-Frame-Options
+        value: DENY
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    # Custom domains configured in Render dashboard:
     # - sql2.ai
     # - www.sql2.ai
