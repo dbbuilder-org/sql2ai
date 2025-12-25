@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
+  <Metadata>
+    <Identity Id="SSMS-AI.SSMS.a1b2c3d4-e5f6-7890-ab12-345678901234" Version="1.0" Language="en-US" Publisher="SSMS-AI Team" />
+    <DisplayName>SSMS-AI</DisplayName>
+    <Description xml:space="preserve">AI-powered SQL Server Management Studio add-in for intelligent code assistance</Description>
+    <MoreInfo>https://github.com/yourusername/SSMS-AI</MoreInfo>
+    <License>LICENSE.txt</License>
+    <Icon>Resources\icon.png</Icon>
+    <PreviewImage>Resources\preview.png</PreviewImage>
+    <Tags>SSMS, SQL, AI, ChatGPT, Gemini, Claude, Productivity</Tags>
+  </Metadata>
+  <Installation>
+    <InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="[17.0, 18.0)" />
+    <InstallationTarget Version="[18.0,20.0)" Id="ssms" />
+  </Installation>
+  <Dependencies>
+    <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.8,)" />
+  </Dependencies>
+  <Prerequisites>
+    <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[17.0,18.0)" DisplayName="Visual Studio core editor" />
+  </Prerequisites>
+  <Assets>
+    <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
+  </Assets>
+</PackageManifest>

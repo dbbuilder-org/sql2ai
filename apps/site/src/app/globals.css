@@ -1,0 +1,191 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Import fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap');
+
+@layer base {
+  :root {
+    --font-sans: 'Inter', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  }
+
+  html {
+    @apply antialiased;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-bg-base text-text-primary font-sans;
+  }
+
+  /* Typography defaults */
+  h1 {
+    @apply text-h1 text-text-primary;
+  }
+
+  h2 {
+    @apply text-h2 text-text-primary;
+  }
+
+  h3 {
+    @apply text-h3 text-text-primary;
+  }
+
+  h4 {
+    @apply text-h4 text-text-primary;
+  }
+
+  p {
+    @apply text-body text-text-secondary;
+  }
+
+  code {
+    @apply font-mono text-code;
+  }
+
+  /* Focus styles */
+  *:focus-visible {
+    @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-bg-base;
+  }
+
+  /* Selection */
+  ::selection {
+    @apply bg-primary/30 text-text-primary;
+  }
+}
+
+@layer components {
+  /* Button base styles */
+  .btn {
+    @apply inline-flex items-center justify-center rounded-lg font-medium transition-colors;
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-base;
+    @apply disabled:pointer-events-none disabled:opacity-50;
+  }
+
+  .btn-primary {
+    @apply btn bg-primary text-white hover:bg-primary-hover;
+    @apply px-6 py-3;
+  }
+
+  .btn-secondary {
+    @apply btn border-2 border-border text-text-primary hover:border-primary hover:text-primary;
+    @apply px-6 py-3;
+  }
+
+  .btn-ghost {
+    @apply btn text-text-secondary hover:text-text-primary hover:bg-bg-elevated;
+    @apply px-4 py-2;
+  }
+
+  /* Card styles */
+  .card {
+    @apply bg-bg-surface rounded-xl border border-border;
+  }
+
+  .card-elevated {
+    @apply bg-bg-elevated rounded-xl border border-border;
+  }
+
+  /* Code block container */
+  .code-block {
+    @apply bg-bg-base rounded-lg border border-border overflow-hidden;
+  }
+
+  .code-block-header {
+    @apply flex items-center justify-between px-4 py-2 bg-bg-surface border-b border-border;
+  }
+
+  .code-block-content {
+    @apply p-4 overflow-x-auto;
+  }
+
+  /* Terminal block */
+  .terminal {
+    @apply bg-bg-base rounded-lg border border-border overflow-hidden;
+  }
+
+  .terminal-header {
+    @apply flex items-center gap-2 px-4 py-3 bg-bg-surface border-b border-border;
+  }
+
+  .terminal-dot {
+    @apply w-3 h-3 rounded-full;
+  }
+
+  .terminal-content {
+    @apply p-4 font-mono text-code;
+  }
+
+  /* Platform badges */
+  .badge-postgresql {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium;
+    @apply bg-postgresql/10 text-postgresql border border-postgresql/20;
+  }
+
+  .badge-sqlserver {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium;
+    @apply bg-sqlserver/10 text-sqlserver border border-sqlserver/20;
+  }
+
+  /* Section container */
+  .section {
+    @apply py-20 md:py-24 lg:py-32;
+  }
+
+  .container-narrow {
+    @apply max-w-4xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .container-wide {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Gradient text */
+  .gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-400;
+  }
+}
+
+@layer utilities {
+  /* Hide scrollbar but keep functionality */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Custom scrollbar */
+  .scrollbar-custom {
+    scrollbar-width: thin;
+    scrollbar-color: theme('colors.border.DEFAULT') transparent;
+  }
+
+  .scrollbar-custom::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  .scrollbar-custom::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-custom::-webkit-scrollbar-thumb {
+    background: theme('colors.border.DEFAULT');
+    border-radius: 4px;
+  }
+
+  .scrollbar-custom::-webkit-scrollbar-thumb:hover {
+    background: theme('colors.border.emphasis');
+  }
+
+  /* Text balance for headings */
+  .text-balance {
+    text-wrap: balance;
+  }
+}

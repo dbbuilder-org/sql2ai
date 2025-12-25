@@ -1,0 +1,18 @@
+{
+  "name": "ui-components",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/ui-components/src",
+  "projectType": "library",
+  "tags": ["scope:lib", "type:ui"],
+  "targets": {
+    "build": {
+      "executor": "@nx/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/ui-components"
+      }
+    },
+    "lint": { "executor": "@nx/eslint:lint", "options": { "lintFilePatterns": ["libs/ui-components/**/*.{ts,tsx}"] } },
+    "test": { "executor": "@nx/jest:jest", "options": { "jestConfig": "libs/ui-components/jest.config.ts", "passWithNoTests": true } }
+  }
+}

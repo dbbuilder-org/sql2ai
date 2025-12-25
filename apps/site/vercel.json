@@ -1,0 +1,7 @@
+{
+  "framework": "nextjs",
+  "buildCommand": "npx nx build site --prod",
+  "outputDirectory": "../../dist/apps/site/.next",
+  "installCommand": "npm install",
+  "devCommand": "npx nx serve site"
+}

@@ -1,0 +1,12 @@
+{
+  "name": "llm-orchestrator",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/llm-orchestrator/src",
+  "projectType": "library",
+  "tags": ["scope:lib", "type:ai"],
+  "targets": {
+    "build": { "executor": "@nx/js:tsc", "outputs": ["{options.outputPath}"], "options": { "outputPath": "dist/libs/llm-orchestrator", "main": "libs/llm-orchestrator/src/index.ts", "tsConfig": "libs/llm-orchestrator/tsconfig.lib.json" } },
+    "lint": { "executor": "@nx/eslint:lint", "options": { "lintFilePatterns": ["libs/llm-orchestrator/**/*.ts"] } },
+    "test": { "executor": "@nx/jest:jest", "options": { "jestConfig": "libs/llm-orchestrator/jest.config.ts", "passWithNoTests": true } }
+  }
+}

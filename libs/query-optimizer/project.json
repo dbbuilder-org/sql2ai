@@ -1,0 +1,26 @@
+{
+  "name": "query-optimizer",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/query-optimizer/src",
+  "projectType": "library",
+  "tags": ["scope:lib", "type:sql"],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/query-optimizer",
+        "main": "libs/query-optimizer/src/index.ts",
+        "tsConfig": "libs/query-optimizer/tsconfig.lib.json"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": { "lintFilePatterns": ["libs/query-optimizer/**/*.ts"] }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "options": { "jestConfig": "libs/query-optimizer/jest.config.ts", "passWithNoTests": true }
+    }
+  }
+}

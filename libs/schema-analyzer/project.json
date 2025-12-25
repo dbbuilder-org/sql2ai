@@ -1,0 +1,32 @@
+{
+  "name": "schema-analyzer",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/schema-analyzer/src",
+  "projectType": "library",
+  "tags": ["scope:lib", "type:sql"],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/schema-analyzer",
+        "main": "libs/schema-analyzer/src/index.ts",
+        "tsConfig": "libs/schema-analyzer/tsconfig.lib.json",
+        "assets": ["libs/schema-analyzer/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "lintFilePatterns": ["libs/schema-analyzer/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "options": {
+        "jestConfig": "libs/schema-analyzer/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

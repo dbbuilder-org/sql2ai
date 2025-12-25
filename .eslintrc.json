@@ -1,0 +1,58 @@
+{
+  "root": true,
+  "ignorePatterns": ["**/*"],
+  "plugins": ["@nx"],
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
+      "rules": {
+        "@nx/enforce-module-boundaries": [
+          "error",
+          {
+            "enforceBuildableLibDependency": true,
+            "allow": [],
+            "depConstraints": [
+              {
+                "sourceTag": "scope:api",
+                "onlyDependOnLibsWithTags": ["scope:lib", "scope:pkg"]
+              },
+              {
+                "sourceTag": "scope:web",
+                "onlyDependOnLibsWithTags": ["scope:lib", "scope:pkg"]
+              },
+              {
+                "sourceTag": "scope:lib",
+                "onlyDependOnLibsWithTags": ["scope:lib", "scope:pkg"]
+              },
+              {
+                "sourceTag": "scope:pkg",
+                "onlyDependOnLibsWithTags": ["scope:lib", "scope:pkg"]
+              },
+              {
+                "sourceTag": "type:sql",
+                "onlyDependOnLibsWithTags": ["type:sql", "scope:lib"]
+              },
+              {
+                "sourceTag": "type:ui",
+                "onlyDependOnLibsWithTags": ["type:ui", "scope:lib"]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["*.ts", "*.tsx"],
+      "extends": ["plugin:@nx/typescript"],
+      "rules": {
+        "@typescript-eslint/no-explicit-any": "error",
+        "@typescript-eslint/explicit-function-return-type": "warn"
+      }
+    },
+    {
+      "files": ["*.js", "*.jsx"],
+      "extends": ["plugin:@nx/javascript"],
+      "rules": {}
+    }
+  ]
+}

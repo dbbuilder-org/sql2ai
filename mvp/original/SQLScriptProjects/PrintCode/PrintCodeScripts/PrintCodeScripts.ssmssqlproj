@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<SqlWorkbenchSqlProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="PrintCodeScripts">
+  <Items>
+    <LogicalFolder Name="Connections" Type="2" Sorted="true">
+      <Items>
+        <ConnectionNode Name="sqltest,14333:sv">
+          <Created>2025-05-31T00:52:52.4134594-07:00</Created>
+          <Type>SQL</Type>
+          <Server>sqltest,14333</Server>
+          <UserName>sv</UserName>
+          <Authentication>SQL</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <TrustServerCertificate>True</TrustServerCertificate>
+          <HostNameInServerCertificate />
+          <EncryptionOption>False</EncryptionOption>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+      </Items>
+    </LogicalFolder>
+    <LogicalFolder Name="Queries" Type="0" Sorted="true">
+      <Items>
+        <FileNode Name="PrintCode.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:sqltest,14333:False:sv</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>sqltest,14333</AssociatedConnSrvName>
+          <AssociatedConnUserName>sv</AssociatedConnUserName>
+          <FullPath>PrintCode.sql</FullPath>
+        </FileNode>
+        <FileNode Name="PrintCode_ExtendedProperties.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:sqltest,14333:False:sv</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>sqltest,14333</AssociatedConnSrvName>
+          <AssociatedConnUserName>sv</AssociatedConnUserName>
+          <FullPath>PrintCode_ExtendedProperties.sql</FullPath>
+        </FileNode>
+        <FileNode Name="PrintCode_Header.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>PrintCode_Header.sql</FullPath>
+        </FileNode>
+        <FileNode Name="PrintCode_Print.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>PrintCode_Print.sql</FullPath>
+        </FileNode>
+        <FileNode Name="PrintCode_Print_Duplicate.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>PrintCode_Print_Duplicate.sql</FullPath>
+        </FileNode>
+        <FileNode Name="PrintCodeCombined.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>PrintCodeCombined.sql</FullPath>
+        </FileNode>
+        <FileNode Name="PrintCodeVersion.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>PrintCodeVersion.sql</FullPath>
+        </FileNode>
+      </Items>
+    </LogicalFolder>
+    <LogicalFolder Name="Miscellaneous" Type="3" Sorted="true">
+      <Items />
+    </LogicalFolder>
+  </Items>
+</SqlWorkbenchSqlProject>

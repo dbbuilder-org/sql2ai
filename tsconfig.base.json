@@ -1,0 +1,40 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "ES2022",
+    "module": "ESNext",
+    "lib": ["ES2022", "DOM"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "forceConsistentCasingInFileNames": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "baseUrl": ".",
+    "paths": {
+      "@sql2ai/sql-parser": ["libs/sql-parser/src/index.ts"],
+      "@sql2ai/schema-analyzer": ["libs/schema-analyzer/src/index.ts"],
+      "@sql2ai/query-optimizer": ["libs/query-optimizer/src/index.ts"],
+      "@sql2ai/migration-engine": ["libs/migration-engine/src/index.ts"],
+      "@sql2ai/telemetry-collector": ["libs/telemetry-collector/src/index.ts"],
+      "@sql2ai/llm-orchestrator": ["libs/llm-orchestrator/src/index.ts"],
+      "@sql2ai/ui-components": ["libs/ui-components/src/index.ts"],
+      "@sql2ai/shared-types": ["libs/shared-types/src/index.ts"]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}

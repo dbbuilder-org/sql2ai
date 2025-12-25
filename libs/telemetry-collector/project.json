@@ -1,0 +1,12 @@
+{
+  "name": "telemetry-collector",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/telemetry-collector/src",
+  "projectType": "library",
+  "tags": ["scope:lib", "type:sql"],
+  "targets": {
+    "build": { "executor": "@nx/js:tsc", "outputs": ["{options.outputPath}"], "options": { "outputPath": "dist/libs/telemetry-collector", "main": "libs/telemetry-collector/src/index.ts", "tsConfig": "libs/telemetry-collector/tsconfig.lib.json" } },
+    "lint": { "executor": "@nx/eslint:lint", "options": { "lintFilePatterns": ["libs/telemetry-collector/**/*.ts"] } },
+    "test": { "executor": "@nx/jest:jest", "options": { "jestConfig": "libs/telemetry-collector/jest.config.ts", "passWithNoTests": true } }
+  }
+}
