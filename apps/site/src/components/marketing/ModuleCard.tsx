@@ -126,9 +126,12 @@ const colors = {
   rose: '#F43F5E',
 };
 
-// All 23 modules
+// All 23 modules organized by category
 export const modules: Module[] = [
-  // Core Platform (8 modules)
+  // ═══════════════════════════════════════════════════════════════════
+  // DBA TOOLS (7 modules)
+  // Database administration, migrations, performance, and infrastructure
+  // ═══════════════════════════════════════════════════════════════════
   {
     id: 'orchestrate',
     name: 'SQL Orchestrate',
@@ -180,6 +183,80 @@ export const modules: Module[] = [
       'Merge conflict detection',
     ],
   },
+  {
+    id: 'optimize',
+    name: 'SQL Optimize',
+    tagline: 'AI-Driven Performance',
+    description:
+      'Deep analysis of Query Store, wait statistics, and execution plans. Get prioritized remediation with one-click fixes.',
+    icon: icons.optimize,
+    color: colors.orange,
+    href: '/features/optimize/',
+    capabilities: [
+      'Query Store analysis',
+      'Plan regression detection',
+      'Parameter sniffing fixes',
+      'Missing index recommendations',
+      'One-click remediation scripts',
+    ],
+  },
+  {
+    id: 'convert',
+    name: 'SQL Convert',
+    tagline: 'Cross-Platform Migration',
+    description:
+      'AI-powered migration between SQL Server (On-Prem, MI, Azure SQL) and PostgreSQL. Converts Agent jobs to Azure Functions, handles cross-DB queries.',
+    icon: icons.convert,
+    color: colors.teal,
+    href: '/features/convert/',
+    capabilities: [
+      'SQL Server ↔ PostgreSQL conversion',
+      'Agent jobs → Azure Functions',
+      'Cross-database query resolution',
+      'xp_cmdshell replacement',
+      'Plan-Execute-Test-Integrate workflow',
+    ],
+  },
+  {
+    id: 'containerize',
+    name: 'SQL Containerize',
+    tagline: 'Docker & Kubernetes Migration',
+    description:
+      'Migrate databases from on-prem or cloud VMs to Docker, Kubernetes (AKS/EKS/GKE), or cloud container services.',
+    icon: icons.containerize,
+    color: colors.cyan,
+    href: '/features/containerize/',
+    capabilities: [
+      'Docker Compose generation',
+      'Kubernetes StatefulSet configs',
+      'Agent jobs → K8s CronJobs',
+      'Zero-downtime migration',
+      'Multi-cloud support (Azure, AWS, GCP)',
+    ],
+    comingSoon: true,
+  },
+  {
+    id: 'centralize',
+    name: 'SQL Centralize',
+    tagline: 'Multi-Tier Replication',
+    description:
+      'FK-aware data replication, consolidation, and ETL. Supports SQL Server and PostgreSQL with minimal source impact.',
+    icon: icons.centralize,
+    color: colors.postgresql,
+    href: '/features/centralize/',
+    capabilities: [
+      'FK-sensitive sync ordering',
+      'Real-time and batch modes',
+      'Bidirectional replication',
+      'Multi-tier architectures',
+      'Cross-platform (SQL ↔ PG)',
+    ],
+  },
+
+  // ═══════════════════════════════════════════════════════════════════
+  // DEVELOPER TOOLS (6 modules)
+  // Code generation, testing, APIs, and IDE integration
+  // ═══════════════════════════════════════════════════════════════════
   {
     id: 'code',
     name: 'SQL Code',
@@ -233,151 +310,6 @@ export const modules: Module[] = [
     comingSoon: true,
   },
   {
-    id: 'optimize',
-    name: 'SQL Optimize',
-    tagline: 'AI-Driven Performance',
-    description:
-      'Deep analysis of Query Store, wait statistics, and execution plans. Get prioritized remediation with one-click fixes.',
-    icon: icons.optimize,
-    color: colors.orange,
-    href: '/features/optimize/',
-    capabilities: [
-      'Query Store analysis',
-      'Plan regression detection',
-      'Parameter sniffing fixes',
-      'Missing index recommendations',
-      'One-click remediation scripts',
-    ],
-  },
-  {
-    id: 'comply',
-    name: 'SQL Comply',
-    tagline: 'SOC2, HIPAA, GDPR & More',
-    description:
-      'Automated compliance checking at the database level. Scan actual data for PII/PHI with Presidio integration.',
-    icon: icons.comply,
-    color: colors.error,
-    href: '/features/comply/',
-    capabilities: [
-      'SOC 2 Type I & II controls',
-      'HIPAA PHI detection',
-      'GDPR data classification',
-      'PCI-DSS cardholder checks',
-      'Presidio PII scanning',
-    ],
-  },
-
-  // Migration & Conversion (2 modules)
-  {
-    id: 'convert',
-    name: 'SQL Convert',
-    tagline: 'Cross-Platform Migration',
-    description:
-      'AI-powered migration between SQL Server (On-Prem, MI, Azure SQL) and PostgreSQL. Converts Agent jobs to Azure Functions, handles cross-DB queries.',
-    icon: icons.convert,
-    color: colors.teal,
-    href: '/features/convert/',
-    capabilities: [
-      'SQL Server ↔ PostgreSQL conversion',
-      'Agent jobs → Azure Functions',
-      'Cross-database query resolution',
-      'xp_cmdshell replacement',
-      'Plan-Execute-Test-Integrate workflow',
-    ],
-  },
-  {
-    id: 'containerize',
-    name: 'SQL Containerize',
-    tagline: 'Docker & Kubernetes Migration',
-    description:
-      'Migrate databases from on-prem or cloud VMs to Docker, Kubernetes (AKS/EKS/GKE), or cloud container services.',
-    icon: icons.containerize,
-    color: colors.cyan,
-    href: '/features/containerize/',
-    capabilities: [
-      'Docker Compose generation',
-      'Kubernetes StatefulSet configs',
-      'Agent jobs → K8s CronJobs',
-      'Zero-downtime migration',
-      'Multi-cloud support (Azure, AWS, GCP)',
-    ],
-    comingSoon: true,
-  },
-
-  // Data Quality (3 modules)
-  {
-    id: 'standardize',
-    name: 'SQL Standardize',
-    tagline: 'Database Standards Enforcement',
-    description:
-      'Enforce naming conventions, coding standards, and structural patterns. Analyze and auto-fix databases to meet your standards.',
-    icon: icons.standardize,
-    color: colors.lime,
-    href: '/features/standardize/',
-    capabilities: [
-      'Naming convention enforcement',
-      'Coding standards checking',
-      'Normalization analysis',
-      'View vs table recommendations',
-      'Auto-fix generation',
-    ],
-  },
-  {
-    id: 'anonymize',
-    name: 'SQL Anonymize',
-    tagline: 'Secure Clean Room Data',
-    description:
-      'Create clean room environments with realistic data that bears no resemblance to source. Full privacy with FK integrity preserved.',
-    icon: icons.anonymize,
-    color: colors.pink,
-    href: '/features/anonymize/',
-    capabilities: [
-      'Presidio-powered PII detection',
-      'K-anonymity validation',
-      'Consistent fake data generation',
-      'FK relationship preservation',
-      'Re-identification prevention',
-    ],
-  },
-  {
-    id: 'simulate',
-    name: 'SQL Simulate',
-    tagline: 'Synthetic Data Generation',
-    description:
-      'Generate realistic synthetic data from metadata without source access. Perfect for new systems, load testing, and demos.',
-    icon: icons.simulate,
-    color: colors.rose,
-    href: '/features/simulate/',
-    capabilities: [
-      'AI-powered column understanding',
-      'Distribution modeling',
-      'FK-aware generation',
-      'Edge case scenarios',
-      'Scalable data volumes',
-    ],
-  },
-
-  // Data Movement (2 modules)
-  {
-    id: 'centralize',
-    name: 'SQL Centralize',
-    tagline: 'Multi-Tier Replication',
-    description:
-      'FK-aware data replication, consolidation, and ETL. Supports SQL Server and PostgreSQL with minimal source impact.',
-    icon: icons.centralize,
-    color: colors.postgresql,
-    href: '/features/centralize/',
-    capabilities: [
-      'FK-sensitive sync ordering',
-      'Real-time and batch modes',
-      'Bidirectional replication',
-      'Multi-tier architectures',
-      'Cross-platform (SQL ↔ PG)',
-    ],
-  },
-
-  // Developer Tools (3 modules)
-  {
     id: 'test',
     name: 'SQL Test',
     tagline: 'AI-Powered DB Testing',
@@ -412,25 +344,44 @@ export const modules: Module[] = [
     ],
   },
   {
-    id: 'converse',
-    name: 'SQL Converse',
-    tagline: 'Bidirectional AI Bridge',
+    id: 'simulate',
+    name: 'SQL Simulate',
+    tagline: 'Synthetic Data Generation',
     description:
-      'Two-way conversation between databases and AI using LangChain/LiteLLM. Table-based middleware with PII filtering ensures no data leaks.',
-    icon: icons.converse,
-    color: colors.primary,
-    href: '/features/converse/',
+      'Generate realistic synthetic data from metadata without source access. Perfect for new systems, load testing, and demos.',
+    icon: icons.simulate,
+    color: colors.rose,
+    href: '/features/simulate/',
     capabilities: [
-      'LangChain/LangGraph integration',
-      'LiteLLM model flexibility',
-      'Table-based request/response',
-      'Presidio PII filtering',
-      'Multi-turn conversations',
+      'AI-powered column understanding',
+      'Distribution modeling',
+      'FK-aware generation',
+      'Edge case scenarios',
+      'Scalable data volumes',
     ],
-    comingSoon: true,
   },
 
-  // Security & Communication (4 modules)
+  // ═══════════════════════════════════════════════════════════════════
+  // COMPLIANCE & SECURITY (8 modules)
+  // Regulatory compliance, encryption, auditing, and data protection
+  // ═══════════════════════════════════════════════════════════════════
+  {
+    id: 'comply',
+    name: 'SQL Comply',
+    tagline: 'SOC2, HIPAA, GDPR & More',
+    description:
+      'Automated compliance checking at the database level. Scan actual data for PII/PHI with Presidio integration.',
+    icon: icons.comply,
+    color: colors.error,
+    href: '/features/comply/',
+    capabilities: [
+      'SOC 2 Type I & II controls',
+      'HIPAA PHI detection',
+      'GDPR data classification',
+      'PCI-DSS cardholder checks',
+      'Presidio PII scanning',
+    ],
+  },
   {
     id: 'audit',
     name: 'SQL Audit',
@@ -484,6 +435,40 @@ export const modules: Module[] = [
     comingSoon: true,
   },
   {
+    id: 'anonymize',
+    name: 'SQL Anonymize',
+    tagline: 'Secure Clean Room Data',
+    description:
+      'Create clean room environments with realistic data that bears no resemblance to source. Full privacy with FK integrity preserved.',
+    icon: icons.anonymize,
+    color: colors.pink,
+    href: '/features/anonymize/',
+    capabilities: [
+      'Presidio-powered PII detection',
+      'K-anonymity validation',
+      'Consistent fake data generation',
+      'FK relationship preservation',
+      'Re-identification prevention',
+    ],
+  },
+  {
+    id: 'standardize',
+    name: 'SQL Standardize',
+    tagline: 'Database Standards Enforcement',
+    description:
+      'Enforce naming conventions, coding standards, and structural patterns. Analyze and auto-fix databases to meet your standards.',
+    icon: icons.standardize,
+    color: colors.lime,
+    href: '/features/standardize/',
+    capabilities: [
+      'Naming convention enforcement',
+      'Coding standards checking',
+      'Normalization analysis',
+      'View vs table recommendations',
+      'Auto-fix generation',
+    ],
+  },
+  {
     id: 'send',
     name: 'SQL Send',
     tagline: 'Database Messaging',
@@ -518,7 +503,10 @@ export const modules: Module[] = [
     ],
   },
 
-  // Autonomous Operations (1 module)
+  // ═══════════════════════════════════════════════════════════════════
+  // AI AGENTS (2 modules)
+  // Autonomous AI operations and conversational database interfaces
+  // ═══════════════════════════════════════════════════════════════════
   {
     id: 'agent',
     name: 'SQL Agent',
@@ -536,43 +524,46 @@ export const modules: Module[] = [
       'Configurable autonomy levels',
     ],
   },
+  {
+    id: 'converse',
+    name: 'SQL Converse',
+    tagline: 'Bidirectional AI Bridge',
+    description:
+      'Two-way conversation between databases and AI using LangChain/LiteLLM. Table-based middleware with PII filtering ensures no data leaks.',
+    icon: icons.converse,
+    color: colors.primary,
+    href: '/features/converse/',
+    capabilities: [
+      'LangChain/LangGraph integration',
+      'LiteLLM model flexibility',
+      'Table-based request/response',
+      'Presidio PII filtering',
+      'Multi-turn conversations',
+    ],
+    comingSoon: true,
+  },
 ];
 
 // Group modules by category for features page
 export const moduleCategories = [
   {
-    name: 'Core Platform',
-    description: 'Essential database development and monitoring tools',
-    modules: ['orchestrate', 'migrator', 'version', 'code', 'writer', 'ssms', 'optimize', 'comply'],
+    name: 'DBA Tools',
+    description: 'Database administration, migrations, performance, and infrastructure',
+    modules: ['orchestrate', 'migrator', 'version', 'optimize', 'convert', 'containerize', 'centralize'],
   },
   {
-    name: 'Migration & Containerization',
-    description: 'Move databases across platforms and environments',
-    modules: ['convert', 'containerize'],
+    name: 'Developer Tools',
+    description: 'Code generation, testing, APIs, and IDE integration',
+    modules: ['code', 'writer', 'ssms', 'test', 'api', 'simulate'],
   },
   {
-    name: 'Data Quality & Testing',
-    description: 'Ensure data integrity, standards, and reliability',
-    modules: ['standardize', 'anonymize', 'simulate', 'test'],
+    name: 'Compliance & Security',
+    description: 'Regulatory compliance, encryption, auditing, and data protection',
+    modules: ['comply', 'audit', 'encrypt', 'tenant', 'anonymize', 'standardize', 'send', 'receive'],
   },
   {
-    name: 'Data Movement',
-    description: 'Replicate and synchronize data across systems',
-    modules: ['centralize'],
-  },
-  {
-    name: 'Developer Experience',
-    description: 'Accelerate development with AI-powered tools',
-    modules: ['api', 'converse'],
-  },
-  {
-    name: 'Security & Communication',
-    description: 'Protect data and enable secure messaging',
-    modules: ['audit', 'encrypt', 'tenant', 'send', 'receive'],
-  },
-  {
-    name: 'Autonomous Operations',
-    description: 'AI agents that autonomously manage database operations',
-    modules: ['agent'],
+    name: 'AI Agents',
+    description: 'Autonomous AI operations and conversational database interfaces',
+    modules: ['agent', 'converse'],
   },
 ];
