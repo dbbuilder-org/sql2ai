@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { CTASection } from '../../../components/marketing';
 
 export const metadata: Metadata = {
-  title: 'SQL API - Complete Data Layer Generation | SQL2.AI',
+  title: 'SQL Connect - Complete Data Layer Generation | SQL2.AI',
   description:
     'Generate type-safe APIs from your database schema. FastAPI, .NET Core, Node.js with SAGA pattern support and automatic maintenance.',
 };
@@ -32,7 +32,7 @@ export default function APIPage(): JSX.Element {
                 </svg>
               </div>
               <div>
-                <h1 className="text-h1 text-text-primary">SQL API</h1>
+                <h1 className="text-h1 text-text-primary">SQL Connect</h1>
                 <p className="text-lg text-[#6366F1] font-medium">Data Layer Generation</p>
               </div>
             </div>

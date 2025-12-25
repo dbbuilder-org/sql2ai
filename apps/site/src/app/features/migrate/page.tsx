@@ -3,12 +3,12 @@ import Link from 'next/link';
 import { CTASection } from '../../../components/marketing';
 
 export const metadata: Metadata = {
-  title: 'SQL Migrator - Database-First Migrations | SQL2.AI',
+  title: 'SQL Migrate - Database-First Migrations | SQL2.AI',
   description:
     'Generate code from your database, not the reverse. Auto-generate Dapper models, TypeScript types, and versioned migrations.',
 };
 
-export default function MigratorPage(): JSX.Element {
+export default function MigratePage(): JSX.Element {
   return (
     <>
       {/* Hero */}
@@ -37,14 +37,14 @@ export default function MigratorPage(): JSX.Element {
                 </svg>
               </div>
               <div>
-                <h1 className="text-h1 text-text-primary">SQL Migrator</h1>
+                <h1 className="text-h1 text-text-primary">SQL Migrate</h1>
                 <p className="text-lg text-success font-medium">Database-First Migrations</p>
               </div>
             </div>
 
             <p className="text-xl text-text-secondary mb-8">
               Finally, migrations that work the right way. Your database schema is the source of truth.
-              SQL Migrator generates Dapper models, TypeScript types, and rollback scripts automatically.
+              SQL Migrate generates Dapper models, TypeScript types, and rollback scripts automatically.
             </p>
           </div>
         </div>
@@ -83,7 +83,7 @@ export default function MigratorPage(): JSX.Element {
             </div>
 
             <div className="card p-6 border-success/30">
-              <h3 className="text-h5 text-success mb-4">SQL Migrator Database-First</h3>
+              <h3 className="text-h5 text-success mb-4">SQL Migrate Database-First</h3>
               <ul className="space-y-3 text-text-secondary">
                 <li className="flex items-start gap-2">
                   <span className="text-success mt-1">✓</span>
@@ -198,7 +198,7 @@ export interface Customer {
       {/* CTA */}
       <CTASection
         title="Ready for Database-First Migrations?"
-        description="Stop fighting your ORM. Let SQL Migrator generate code from your database."
+        description="Stop fighting your ORM. Let SQL Migrate generate code from your database."
         primaryCTA={{ text: 'Start Free Trial', href: '/signup' }}
         secondaryCTA={{ text: 'View All Features', href: '/features/' }}
       />

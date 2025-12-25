@@ -84,28 +84,30 @@ export function ModuleGrid({ children }: { children: React.ReactNode }): JSX.Ele
 // Icon SVGs as strings
 const icons = {
   orchestrate: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>`,
-  migrator: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>`,
+  monitor: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>`,
+  optimize: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>`,
+  centralize: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>`,
+  migrate: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>`,
+  convert: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>`,
+  containerize: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>`,
   version: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`,
   code: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>`,
   writer: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>`,
   ssms: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>`,
-  optimize: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>`,
-  comply: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>`,
-  convert: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>`,
-  standardize: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>`,
-  centralize: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>`,
-  anonymize: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"/></svg>`,
-  simulate: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>`,
   test: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>`,
-  api: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>`,
+  simulate: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>`,
+  anonymize: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"/></svg>`,
+  standardize: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>`,
+  comply: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>`,
   audit: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>`,
+  encrypt: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>`,
+  tenant: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>`,
   send: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>`,
   receive: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 4H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-2m-4 0v8m0 0l3-3m-3 3L9 9"/></svg>`,
-  containerize: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>`,
-  tenant: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>`,
-  encrypt: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>`,
-  converse: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>`,
+  connect: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>`,
+  import: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>`,
   agent: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>`,
+  converse: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>`,
 };
 
 // Colors for each module
@@ -126,12 +128,29 @@ const colors = {
   rose: '#F43F5E',
 };
 
-// All 23 modules organized by category
+// All 25 modules organized by category
 export const modules: Module[] = [
   // ═══════════════════════════════════════════════════════════════════
-  // DBA TOOLS (7 modules)
-  // Database administration, migrations, performance, and infrastructure
+  // DBA TOOLS (4 modules)
+  // Database administration, monitoring, performance, and replication
   // ═══════════════════════════════════════════════════════════════════
+  {
+    id: 'monitor',
+    name: 'SQL Monitor',
+    tagline: 'Real-Time Database Monitoring',
+    description:
+      'Comprehensive monitoring dashboard for SQL Server and PostgreSQL. Track performance, connections, queries, and health metrics in real-time.',
+    icon: icons.monitor,
+    color: colors.info,
+    href: '/features/monitor/',
+    capabilities: [
+      'Real-time performance dashboards',
+      'Query performance tracking',
+      'Connection pool monitoring',
+      'Alert and notification system',
+      'Historical trend analysis',
+    ],
+  },
   {
     id: 'orchestrate',
     name: 'SQL Orchestrate',
@@ -150,40 +169,6 @@ export const modules: Module[] = [
     ],
   },
   {
-    id: 'migrator',
-    name: 'SQL Migrator',
-    tagline: 'Database-First Migrations',
-    description:
-      'Generate code from your database, not the reverse. Auto-generate Dapper models, TypeScript types, and versioned migrations.',
-    icon: icons.migrator,
-    color: colors.success,
-    href: '/features/migrator/',
-    capabilities: [
-      'Database-first schema capture',
-      'Auto-generate Dapper C# models',
-      'Generate TypeScript types for APIs',
-      'Convert DACPAC to versioned migrations',
-      'Dependency-aware rollback scripts',
-    ],
-  },
-  {
-    id: 'version',
-    name: 'SQL Version',
-    tagline: 'Git for Your Database',
-    description:
-      'Track every change to every database object. Full history, blame, diff, and rollback for stored procedures, views, and more.',
-    icon: icons.version,
-    color: colors.warning,
-    href: '/features/version/',
-    capabilities: [
-      'Object-level version history',
-      'Diff between any two versions',
-      'Line-by-line blame attribution',
-      'Branch support for environments',
-      'Merge conflict detection',
-    ],
-  },
-  {
     id: 'optimize',
     name: 'SQL Optimize',
     tagline: 'AI-Driven Performance',
@@ -198,6 +183,45 @@ export const modules: Module[] = [
       'Parameter sniffing fixes',
       'Missing index recommendations',
       'One-click remediation scripts',
+    ],
+  },
+  {
+    id: 'centralize',
+    name: 'SQL Centralize',
+    tagline: 'Multi-Tier Replication',
+    description:
+      'FK-aware data replication, consolidation, and ETL. Supports SQL Server and PostgreSQL with minimal source impact.',
+    icon: icons.centralize,
+    color: colors.postgresql,
+    href: '/features/centralize/',
+    capabilities: [
+      'FK-sensitive sync ordering',
+      'Real-time and batch modes',
+      'Bidirectional replication',
+      'Multi-tier architectures',
+      'Cross-platform (SQL ↔ PG)',
+    ],
+  },
+
+  // ═══════════════════════════════════════════════════════════════════
+  // MIGRATION TOOLS (3 modules)
+  // Database migrations and platform conversions
+  // ═══════════════════════════════════════════════════════════════════
+  {
+    id: 'migrate',
+    name: 'SQL Migrate',
+    tagline: 'Database-First Migrations',
+    description:
+      'Generate code from your database, not the reverse. Auto-generate Dapper models, TypeScript types, and versioned migrations.',
+    icon: icons.migrate,
+    color: colors.success,
+    href: '/features/migrate/',
+    capabilities: [
+      'Database-first schema capture',
+      'Auto-generate Dapper C# models',
+      'Generate TypeScript types for APIs',
+      'Convert DACPAC to versioned migrations',
+      'Dependency-aware rollback scripts',
     ],
   },
   {
@@ -235,28 +259,28 @@ export const modules: Module[] = [
     ],
     comingSoon: true,
   },
-  {
-    id: 'centralize',
-    name: 'SQL Centralize',
-    tagline: 'Multi-Tier Replication',
-    description:
-      'FK-aware data replication, consolidation, and ETL. Supports SQL Server and PostgreSQL with minimal source impact.',
-    icon: icons.centralize,
-    color: colors.postgresql,
-    href: '/features/centralize/',
-    capabilities: [
-      'FK-sensitive sync ordering',
-      'Real-time and batch modes',
-      'Bidirectional replication',
-      'Multi-tier architectures',
-      'Cross-platform (SQL ↔ PG)',
-    ],
-  },
 
   // ═══════════════════════════════════════════════════════════════════
   // DEVELOPER TOOLS (6 modules)
-  // Code generation, testing, APIs, and IDE integration
+  // Code generation, testing, versioning, and IDE integration
   // ═══════════════════════════════════════════════════════════════════
+  {
+    id: 'version',
+    name: 'SQL Version',
+    tagline: 'Git for Your Database',
+    description:
+      'Track every change to every database object. Full history, blame, diff, and rollback for stored procedures, views, and more.',
+    icon: icons.version,
+    color: colors.warning,
+    href: '/features/version/',
+    capabilities: [
+      'Object-level version history',
+      'Diff between any two versions',
+      'Line-by-line blame attribution',
+      'Branch support for environments',
+      'Merge conflict detection',
+    ],
+  },
   {
     id: 'code',
     name: 'SQL Code',
@@ -327,23 +351,6 @@ export const modules: Module[] = [
     ],
   },
   {
-    id: 'api',
-    name: 'SQL API',
-    tagline: 'Data Layer Generation',
-    description:
-      'Generate complete APIs in FastAPI, .NET Core, Next.js, or Node.js with type-safe clients. Native SP integration with SAGA pattern support.',
-    icon: icons.api,
-    color: colors.indigo,
-    href: '/features/api/',
-    capabilities: [
-      'FastAPI, .NET, Node.js generation',
-      'Type-safe React/Vue clients',
-      'Stored procedure integration',
-      'SAGA pattern transactions',
-      'Auto-sync with schema changes',
-    ],
-  },
-  {
     id: 'simulate',
     name: 'SQL Simulate',
     tagline: 'Synthetic Data Generation',
@@ -362,8 +369,120 @@ export const modules: Module[] = [
   },
 
   // ═══════════════════════════════════════════════════════════════════
-  // COMPLIANCE & SECURITY (8 modules)
-  // Regulatory compliance, encryption, auditing, and data protection
+  // SYNTHETIC DATA TOOLS (2 modules)
+  // Data anonymization and standards enforcement
+  // ═══════════════════════════════════════════════════════════════════
+  {
+    id: 'anonymize',
+    name: 'SQL Anonymize',
+    tagline: 'Secure Clean Room Data',
+    description:
+      'Create clean room environments with realistic data that bears no resemblance to source. Full privacy with FK integrity preserved.',
+    icon: icons.anonymize,
+    color: colors.pink,
+    href: '/features/anonymize/',
+    capabilities: [
+      'Presidio-powered PII detection',
+      'K-anonymity validation',
+      'Consistent fake data generation',
+      'FK relationship preservation',
+      'Re-identification prevention',
+    ],
+  },
+  {
+    id: 'standardize',
+    name: 'SQL Standardize',
+    tagline: 'Database Standards Enforcement',
+    description:
+      'Enforce naming conventions, coding standards, and structural patterns. Analyze and auto-fix databases to meet your standards.',
+    icon: icons.standardize,
+    color: colors.lime,
+    href: '/features/standardize/',
+    capabilities: [
+      'Naming convention enforcement',
+      'Coding standards checking',
+      'Normalization analysis',
+      'View vs table recommendations',
+      'Auto-fix generation',
+    ],
+  },
+
+  // ═══════════════════════════════════════════════════════════════════
+  // INTEGRATION TOOLS (4 modules)
+  // APIs, messaging, and data import/export
+  // ═══════════════════════════════════════════════════════════════════
+  {
+    id: 'connect',
+    name: 'SQL Connect',
+    tagline: 'Data Layer Generation',
+    description:
+      'Generate complete APIs in FastAPI, .NET Core, Next.js, or Node.js with type-safe clients. Native SP integration with SAGA pattern support.',
+    icon: icons.connect,
+    color: colors.indigo,
+    href: '/features/connect/',
+    capabilities: [
+      'FastAPI, .NET, Node.js generation',
+      'Type-safe React/Vue clients',
+      'Stored procedure integration',
+      'SAGA pattern transactions',
+      'Auto-sync with schema changes',
+    ],
+  },
+  {
+    id: 'import',
+    name: 'SQL Import',
+    tagline: 'Intelligent Data Ingestion',
+    description:
+      'Smart data import from CSV, Excel, JSON, and external databases with automatic schema detection, validation, and transformation.',
+    icon: icons.import,
+    color: colors.success,
+    href: '/features/import/',
+    capabilities: [
+      'Auto-detect schema from files',
+      'CSV, Excel, JSON, Parquet support',
+      'Data validation and cleansing',
+      'Incremental and bulk import modes',
+      'External database connections',
+    ],
+  },
+  {
+    id: 'send',
+    name: 'SQL Send',
+    tagline: 'Database Messaging',
+    description:
+      'Unified email and SMS from database via SendGrid, Resend, Twilio. Transactional outbox pattern ensures reliable delivery.',
+    icon: icons.send,
+    color: colors.info,
+    href: '/features/send/',
+    capabilities: [
+      'SendGrid, Resend, Twilio',
+      'Transactional outbox pattern',
+      'Template support',
+      'Delivery tracking',
+      'Native SQL/PG procedures',
+    ],
+  },
+  {
+    id: 'receive',
+    name: 'SQL Receive',
+    tagline: 'Secure Inbound Gateway',
+    description:
+      'Unified readers for files, APIs, and emails with malware scanning, SQL injection prevention, and PII detection.',
+    icon: icons.receive,
+    color: colors.cyan,
+    href: '/features/receive/',
+    capabilities: [
+      'ClamAV/VirusTotal scanning',
+      'SQL injection prevention',
+      'PII detection (Presidio)',
+      'File integrity validation',
+      'SFTP, S3, API, email sources',
+    ],
+  },
+
+  // ═══════════════════════════════════════════════════════════════════
+  // COMPLIANCE & SECURITY (4 modules)
+  // Regulatory compliance, encryption, and auditing
   // ═══════════════════════════════════════════════════════════════════
   {
     id: 'comply',
@@ -434,77 +553,9 @@ export const modules: Module[] = [
     ],
     comingSoon: true,
   },
-  {
-    id: 'anonymize',
-    name: 'SQL Anonymize',
-    tagline: 'Secure Clean Room Data',
-    description:
-      'Create clean room environments with realistic data that bears no resemblance to source. Full privacy with FK integrity preserved.',
-    icon: icons.anonymize,
-    color: colors.pink,
-    href: '/features/anonymize/',
-    capabilities: [
-      'Presidio-powered PII detection',
-      'K-anonymity validation',
-      'Consistent fake data generation',
-      'FK relationship preservation',
-      'Re-identification prevention',
-    ],
-  },
-  {
-    id: 'standardize',
-    name: 'SQL Standardize',
-    tagline: 'Database Standards Enforcement',
-    description:
-      'Enforce naming conventions, coding standards, and structural patterns. Analyze and auto-fix databases to meet your standards.',
-    icon: icons.standardize,
-    color: colors.lime,
-    href: '/features/standardize/',
-    capabilities: [
-      'Naming convention enforcement',
-      'Coding standards checking',
-      'Normalization analysis',
-      'View vs table recommendations',
-      'Auto-fix generation',
-    ],
-  },
-  {
-    id: 'send',
-    name: 'SQL Send',
-    tagline: 'Database Messaging',
-    description:
-      'Unified email and SMS from database via SendGrid, Resend, Twilio. Transactional outbox pattern ensures reliable delivery.',
-    icon: icons.send,
-    color: colors.info,
-    href: '/features/send/',
-    capabilities: [
-      'SendGrid, Resend, Twilio',
-      'Transactional outbox pattern',
-      'Template support',
-      'Delivery tracking',
-      'Native SQL/PG procedures',
-    ],
-  },
-  {
-    id: 'receive',
-    name: 'SQL Receive',
-    tagline: 'Secure Inbound Gateway',
-    description:
-      'Unified readers for files, APIs, and emails with malware scanning, SQL injection prevention, and PII detection.',
-    icon: icons.receive,
-    color: colors.cyan,
-    href: '/features/receive/',
-    capabilities: [
-      'ClamAV/VirusTotal scanning',
-      'SQL injection prevention',
-      'PII detection (Presidio)',
-      'File integrity validation',
-      'SFTP, S3, API, email sources',
-    ],
-  },
 
   // ═══════════════════════════════════════════════════════════════════
-  // AI AGENTS (2 modules)
+  // AGENTIC AI (2 modules)
   // Autonomous AI operations and conversational database interfaces
   // ═══════════════════════════════════════════════════════════════════
   {
@@ -548,21 +599,36 @@ export const modules: Module[] = [
 export const moduleCategories = [
   {
     name: 'DBA Tools',
-    description: 'Database administration, migrations, performance, and infrastructure',
-    modules: ['orchestrate', 'migrator', 'version', 'optimize', 'convert', 'containerize', 'centralize'],
+    description: 'Database administration, monitoring, performance, and replication',
+    modules: ['monitor', 'orchestrate', 'optimize', 'centralize'],
+  },
+  {
+    name: 'Migration Tools',
+    description: 'Database migrations and platform conversions',
+    modules: ['migrate', 'convert', 'containerize'],
   },
   {
     name: 'Developer Tools',
-    description: 'Code generation, testing, APIs, and IDE integration',
-    modules: ['code', 'writer', 'ssms', 'test', 'api', 'simulate'],
+    description: 'Code generation, testing, versioning, and IDE integration',
+    modules: ['version', 'code', 'writer', 'ssms', 'test', 'simulate'],
+  },
+  {
+    name: 'Synthetic Data',
+    description: 'Data anonymization and standards enforcement',
+    modules: ['anonymize', 'standardize'],
+  },
+  {
+    name: 'Integration Tools',
+    description: 'APIs, messaging, and data import/export',
+    modules: ['connect', 'import', 'send', 'receive'],
   },
   {
     name: 'Compliance & Security',
-    description: 'Regulatory compliance, encryption, auditing, and data protection',
-    modules: ['comply', 'audit', 'encrypt', 'tenant', 'anonymize', 'standardize', 'send', 'receive'],
+    description: 'Regulatory compliance, encryption, and auditing',
+    modules: ['comply', 'audit', 'encrypt', 'tenant'],
   },
   {
-    name: 'AI Agents',
+    name: 'Agentic AI',
     description: 'Autonomous AI operations and conversational database interfaces',
     modules: ['agent', 'converse'],
   },
