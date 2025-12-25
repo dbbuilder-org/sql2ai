@@ -108,6 +108,7 @@ const icons = {
   import: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>`,
   agent: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>`,
   converse: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>`,
+  compare: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>`,
 };
 
 // Colors for each module
@@ -128,7 +129,7 @@ const colors = {
   rose: '#F43F5E',
 };
 
-// All 25 modules organized by category
+// All 26 modules organized by category
 export const modules: Module[] = [
   // ═══════════════════════════════════════════════════════════════════
   // DBA TOOLS (4 modules)
@@ -262,7 +263,7 @@ export const modules: Module[] = [
 
   // ═══════════════════════════════════════════════════════════════════
   // DEVELOPER TOOLS (6 modules)
-  // Code generation, testing, versioning, and IDE integration
+  // Code generation, testing, versioning, comparison, and IDE integration
   // ═══════════════════════════════════════════════════════════════════
   {
     id: 'version',
@@ -351,26 +352,26 @@ export const modules: Module[] = [
     ],
   },
   {
-    id: 'simulate',
-    name: 'SQL Simulate',
-    tagline: 'Synthetic Data Generation',
+    id: 'compare',
+    name: 'SQL Compare',
+    tagline: 'AI Schema Comparison',
     description:
-      'Generate realistic synthetic data from metadata without source access. Perfect for new systems, load testing, and demos.',
-    icon: icons.simulate,
-    color: colors.rose,
-    href: '/features/simulate/',
+      'AI-powered hands-off comparison between databases. Generates modular, implementable sync scripts to align DDL and code across environments.',
+    icon: icons.compare,
+    color: colors.cyan,
+    href: '/features/compare/',
     capabilities: [
-      'AI-powered column understanding',
-      'Distribution modeling',
-      'FK-aware generation',
-      'Edge case scenarios',
-      'Scalable data volumes',
+      'AI-driven schema comparison',
+      'Modular sync script generation',
+      'DDL and stored procedure diff',
+      'Safe deployment ordering',
+      'Environment-aware migrations',
     ],
   },
 
   // ═══════════════════════════════════════════════════════════════════
-  // SYNTHETIC DATA TOOLS (2 modules)
-  // Data anonymization and standards enforcement
+  // SYNTHETIC DATA (2 modules)
+  // Test data generation and anonymization
   // ═══════════════════════════════════════════════════════════════════
   {
     id: 'anonymize',
@@ -390,20 +391,20 @@ export const modules: Module[] = [
     ],
   },
   {
-    id: 'standardize',
-    name: 'SQL Standardize',
-    tagline: 'Database Standards Enforcement',
+    id: 'simulate',
+    name: 'SQL Simulate',
+    tagline: 'Synthetic Data Generation',
     description:
-      'Enforce naming conventions, coding standards, and structural patterns. Analyze and auto-fix databases to meet your standards.',
-    icon: icons.standardize,
-    color: colors.lime,
-    href: '/features/standardize/',
+      'Generate realistic synthetic data from metadata without source access. Perfect for new systems, load testing, and demos.',
+    icon: icons.simulate,
+    color: colors.rose,
+    href: '/features/simulate/',
     capabilities: [
-      'Naming convention enforcement',
-      'Coding standards checking',
-      'Normalization analysis',
-      'View vs table recommendations',
-      'Auto-fix generation',
+      'AI-powered column understanding',
+      'Distribution modeling',
+      'FK-aware generation',
+      'Edge case scenarios',
+      'Scalable data volumes',
     ],
   },
 
@@ -481,8 +482,8 @@ export const modules: Module[] = [
   },
 
   // ═══════════════════════════════════════════════════════════════════
-  // COMPLIANCE & SECURITY (4 modules)
-  // Regulatory compliance, encryption, and auditing
+  // COMPLIANCE & SECURITY (5 modules)
+  // Regulatory compliance, encryption, auditing, and standards
   // ═══════════════════════════════════════════════════════════════════
   {
     id: 'comply',
@@ -553,6 +554,23 @@ export const modules: Module[] = [
     ],
     comingSoon: true,
   },
+  {
+    id: 'standardize',
+    name: 'SQL Standardize',
+    tagline: 'Naming Convention Enforcement',
+    description:
+      'Enforce consistent naming conventions across your database objects. Auto-fix violations and prevent drift from standards.',
+    icon: icons.standardize,
+    color: colors.lime,
+    href: '/features/standardize/',
+    capabilities: [
+      'Convention rule engine',
+      'Auto-fix suggestions',
+      'CI/CD integration',
+      'Custom rule definitions',
+      'Migration script generation',
+    ],
+  },
 
   // ═══════════════════════════════════════════════════════════════════
   // AGENTIC AI (2 modules)
@@ -609,13 +627,13 @@ export const moduleCategories = [
   },
   {
     name: 'Developer Tools',
-    description: 'Code generation, testing, versioning, and IDE integration',
-    modules: ['version', 'code', 'writer', 'ssms', 'test', 'simulate'],
+    description: 'Code generation, testing, versioning, comparison, and IDE integration',
+    modules: ['version', 'code', 'writer', 'ssms', 'test', 'compare'],
   },
   {
     name: 'Synthetic Data',
-    description: 'Data anonymization and standards enforcement',
-    modules: ['anonymize', 'standardize'],
+    description: 'Test data generation and anonymization',
+    modules: ['anonymize', 'simulate'],
   },
   {
     name: 'Integration Tools',
@@ -624,8 +642,8 @@ export const moduleCategories = [
   },
   {
     name: 'Compliance & Security',
-    description: 'Regulatory compliance, encryption, and auditing',
-    modules: ['comply', 'audit', 'encrypt', 'tenant'],
+    description: 'Regulatory compliance, encryption, auditing, and standards',
+    modules: ['comply', 'audit', 'encrypt', 'tenant', 'standardize'],
   },
   {
     name: 'Agentic AI',
