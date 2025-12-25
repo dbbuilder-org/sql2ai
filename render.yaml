@@ -24,3 +24,6 @@ services:
         - nx.json
     healthCheckPath: /
     autoDeploy: true
+    customDomains:
+      - sql2.ai
+      - www.sql2.ai
