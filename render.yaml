@@ -1,0 +1,26 @@
+# Render Blueprint for SQL2.AI
+# https://render.com/docs/blueprint-spec
+
+services:
+  # Marketing Site (Next.js)
+  - type: web
+    name: sql2ai-site
+    runtime: node
+    region: oregon
+    plan: free
+    buildCommand: npm install && npx nx build site
+    startCommand: npx nx start site --port $PORT
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3001
+    rootDir: .
+    buildFilter:
+      paths:
+        - apps/site/**
+        - libs/**
+        - package.json
+        - nx.json
+    healthCheckPath: /
+    autoDeploy: true

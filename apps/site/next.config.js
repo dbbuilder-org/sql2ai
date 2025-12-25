@@ -8,6 +8,7 @@ const nextConfig = {
   nx: {
     svgr: false,
   },
+  output: 'standalone',
   reactStrictMode: true,
   transpilePackages: [
     '@sql2ai/ui-components',
