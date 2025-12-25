@@ -138,71 +138,131 @@ Developer → SQL2.AI → Data Models → Stored Procedures → Optimized Schema
 
 ## Product Modules
 
-### Module 1: SQL Analyzer
-**Purpose:** Deep analysis of existing SQL codebases
-**Source Projects:** sqlanalyzer, sqlanalyzer-web, sqlauditor, sqldepends
+SQL2.AI consists of 8 integrated modules that cover the complete database development lifecycle.
+See `/docs/modules/` for detailed specifications of each module.
 
-**Capabilities:**
-- Schema comparison across environments
-- Stored procedure complexity analysis
-- Dependency mapping (what calls what)
-- Dead code detection
-- Style and convention enforcement
-- Security vulnerability scanning
+### Module 1: SQL Orchestrator
+**Purpose:** Unified monitoring, security auditing, and compliance checking
+**Status:** In Development | **Priority:** P0
 
-### Module 2: SQL Generator
-**Purpose:** AI-driven SQL code generation
-**Source Projects:** SQLMCP, SSMS-AI, db2mid
+**Key Capabilities:**
+- Multi-trigger check execution (scheduled, deployment hooks, anomaly-based)
+- Performance, security, and compliance checks in one framework
+- Schema snapshots for before/after change comparison
+- Agent-based distributed collection (extends sql-monitor-agent)
+- Automated compliance evidence gathering
 
-**Capabilities:**
-- Stored procedure generation from natural language
-- View generation with optimization hints
-- Function generation with proper determinism
-- Index recommendations based on query patterns
-- Constraint generation with business rule translation
+**Documentation:** [01-ORCHESTRATOR.md](./modules/01-ORCHESTRATOR.md)
 
-### Module 3: SQL Migrator
-**Purpose:** Cross-platform and version migrations
-**Source Projects:** bcpplus, rds2alloy, babelfishAI, NewETL
+---
 
-**Capabilities:**
-- SQL Server ↔ PostgreSQL translation
-- Version upgrade assistance (SQL 2012 → 2022)
-- Cloud migration planning (on-prem → RDS/Azure SQL)
-- Data migration with transformation
-- Schema diff and synchronization
+### Module 2: SQL Migrator
+**Purpose:** Database-first migrations that generate code, not the reverse
+**Status:** In Development | **Priority:** P0
 
-### Module 4: SQL Monitor
-**Purpose:** Real-time database observability
-**Source Projects:** sql-monitor, postgresanalyze, rds2datadog
+**Key Capabilities:**
+- Database is source of truth (not code-first ORM)
+- Auto-generate Dapper C# models from schema
+- Generate TypeScript types for API layer
+- Convert DACPAC projects to versioned migrations
+- Dependency-aware rollback script generation
 
-**Capabilities:**
-- Query performance tracking
-- Index usage analysis
-- Blocking/deadlock detection
-- Capacity forecasting
-- Alert generation with AI context
+**Documentation:** [02-MIGRATOR.md](./modules/02-MIGRATOR.md)
 
-### Module 5: SQL Documenter
-**Purpose:** Automated documentation generation
-**Source Projects:** SQLReleaseNotes2, SQLScriptProjects
+---
 
-**Capabilities:**
-- Schema documentation generation
-- Stored procedure documentation
-- Data dictionary maintenance
-- Change tracking and release notes
-- ERD generation
+### Module 3: SQL Version
+**Purpose:** Git-like version control for database objects
+**Status:** Planned | **Priority:** P1
 
-### Module 6: SQL Builder
-**Purpose:** Interactive schema and query design
-**Source Projects:** dbbuilder, AzurePhotoBlobToSQL
+**Key Capabilities:**
+- Object-level version history (each SP, view tracked separately)
+- Diff between any two versions
+- Line-by-line blame attribution
+- Branch support for environments (dev/staging/prod)
+- Merge conflict detection for database objects
 
-**Capabilities:**
-- Visual schema designer
-- Query builder with AI assistance
-- Data modeling with normalization guidance
-- Bulk import/export with transformation
+**Documentation:** [03-VERSION.md](./modules/03-VERSION.md)
+
+---
+
+### Module 4: SQL Code
+**Purpose:** Automated code review, release notes, and AI data dictionary
+**Status:** Planned | **Priority:** P1
+
+**Key Capabilities:**
+- AI-inferred column and table descriptions
+- Auto-generate data dictionaries ("Swagger for Databases")
+- Security vulnerability scanning in SQL code
+- Automatic release notes from migrations
+- OpenAPI-compatible schema export
+
+**Documentation:** [04-CODE.md](./modules/04-CODE.md)
+
+---
+
+### Module 5: SQL Writer
+**Purpose:** AI-powered DDL and programmable object generation
+**Status:** Planned | **Priority:** P1
+
+**Key Differentiator:** Beyond text-to-SQL. Generates complete stored procedures,
+views, functions, and triggers—not just SELECT queries.
+
+**Key Capabilities:**
+- Generate complete stored procedures with TRY/CATCH
+- Views with optimization hints
+- Proper transaction management
+- Security best practices built-in
+- Full schema context awareness
+
+**Documentation:** [05-WRITER.md](./modules/05-WRITER.md)
+
+---
+
+### Module 6: SSMS Plugin
+**Purpose:** Bring AI capabilities directly into SQL Server Management Studio
+**Status:** Planned | **Priority:** P2
+
+**Key Capabilities:**
+- Inline AI query completions in editor
+- Right-click "Explain Query" and "Optimize Query"
+- Execution plan analysis with AI explanations
+- Generate CRUD procedures from table context
+- Local LLM support for air-gapped environments
+
+**Documentation:** [06-SSMS-PLUGIN.md](./modules/06-SSMS-PLUGIN.md)
+
+---
+
+### Module 7: SQL Optimize
+**Purpose:** Deep performance analysis with AI-driven remediation
+**Status:** Planned | **Priority:** P0
+
+**Key Capabilities:**
+- Query Store analysis and plan regression detection
+- Parameter sniffing detection and fixes
+- Missing, unused, and duplicate index analysis
+- Blocking chain and deadlock analysis
+- One-click remediation script generation
+
+**Documentation:** [07-OPTIMIZE.md](./modules/07-OPTIMIZE.md)
+
+---
+
+### Module 8: SQL Comply
+**Purpose:** Automated compliance checking at the database level
+**Status:** Planned | **Priority:** P1
+
+**Supported Frameworks:** SOC 2, HIPAA, PCI-DSS, GDPR, FERPA
+
+**Key Capabilities:**
+- Configuration checks (TDE, TLS, audit settings)
+- Access control analysis (permissions, orphaned users)
+- Data-level PII/PHI scanning with Presidio
+- Automated compliance evidence collection
+- Framework-specific remediation guidance
+
+**Documentation:** [08-COMPLY.md](./modules/08-COMPLY.md)
 
 ---
 
