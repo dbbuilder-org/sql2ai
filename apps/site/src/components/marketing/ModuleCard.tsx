@@ -5,51 +5,12 @@ export interface Module {
   name: string;
   tagline: string;
   description: string;
-  icon: JSX.Element;
-  color: 'primary' | 'success' | 'warning' | 'postgresql' | 'sqlserver' | 'error';
+  icon: string; // SVG string for flexibility
+  color: string; // Hex color
   href: string;
   capabilities: string[];
   comingSoon?: boolean;
 }
-
-const colorClasses = {
-  primary: {
-    bg: 'bg-primary/10',
-    text: 'text-primary',
-    border: 'border-primary/30',
-    hover: 'hover:border-primary',
-  },
-  success: {
-    bg: 'bg-success/10',
-    text: 'text-success',
-    border: 'border-success/30',
-    hover: 'hover:border-success',
-  },
-  warning: {
-    bg: 'bg-warning/10',
-    text: 'text-warning',
-    border: 'border-warning/30',
-    hover: 'hover:border-warning',
-  },
-  postgresql: {
-    bg: 'bg-postgresql/10',
-    text: 'text-postgresql',
-    border: 'border-postgresql/30',
-    hover: 'hover:border-postgresql',
-  },
-  sqlserver: {
-    bg: 'bg-sqlserver/10',
-    text: 'text-sqlserver',
-    border: 'border-sqlserver/30',
-    hover: 'hover:border-sqlserver',
-  },
-  error: {
-    bg: 'bg-error/10',
-    text: 'text-error',
-    border: 'border-error/30',
-    hover: 'hover:border-error',
-  },
-};
 
 interface ModuleCardProps {
   module: Module;
@@ -57,13 +18,12 @@ interface ModuleCardProps {
 }
 
 export function ModuleCard({ module, size = 'default' }: ModuleCardProps): JSX.Element {
-  const colors = colorClasses[module.color];
   const isLarge = size === 'large';
 
   return (
     <Link
       href={module.href}
-      className={`card p-6 ${colors.hover} transition-all group relative ${
+      className={`card p-6 hover:border-primary/50 transition-all group relative ${
         module.comingSoon ? 'opacity-75' : ''
       }`}
     >
@@ -75,15 +35,17 @@ export function ModuleCard({ module, size = 'default' }: ModuleCardProps): JSX.E
 
       <div className="flex items-start gap-4 mb-4">
         <div
-          className={`${isLarge ? 'w-14 h-14' : 'w-12 h-12'} rounded-xl ${colors.bg} flex items-center justify-center ${colors.text} shrink-0`}
-        >
-          {module.icon}
-        </div>
+          className={`${isLarge ? 'w-14 h-14' : 'w-12 h-12'} rounded-xl flex items-center justify-center shrink-0`}
+          style={{ backgroundColor: `${module.color}15`, color: module.color }}
+          dangerouslySetInnerHTML={{ __html: module.icon }}
+        />
         <div>
           <h3 className={`${isLarge ? 'text-h4' : 'text-h5'} text-text-primary mb-1`}>
             {module.name}
           </h3>
-          <p className={`text-small ${colors.text} font-medium`}>{module.tagline}</p>
+          <p className="text-small font-medium" style={{ color: module.color }}>
+            {module.tagline}
+          </p>
         </div>
       </div>
 
@@ -93,17 +55,13 @@ export function ModuleCard({ module, size = 'default' }: ModuleCardProps): JSX.E
         {module.capabilities.slice(0, isLarge ? 5 : 3).map((capability) => (
           <li key={capability} className="flex items-start gap-2 text-xs text-text-muted">
             <svg
-              className={`w-3 h-3 ${colors.text} shrink-0 mt-0.5`}
+              className="w-3 h-3 shrink-0 mt-0.5"
+              style={{ color: module.color }}
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={3}
-                d="M5 13l4 4L19 7"
-              />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
             </svg>
             {capability}
           </li>
@@ -111,7 +69,7 @@ export function ModuleCard({ module, size = 'default' }: ModuleCardProps): JSX.E
       </ul>
 
       <div className="pt-4 border-t border-border-subtle">
-        <span className={`text-small ${colors.text} font-medium group-hover:underline`}>
+        <span className="text-small font-medium group-hover:underline" style={{ color: module.color }}>
           Learn more →
         </span>
       </div>
@@ -120,37 +78,72 @@ export function ModuleCard({ module, size = 'default' }: ModuleCardProps): JSX.E
 }
 
 export function ModuleGrid({ children }: { children: React.ReactNode }): JSX.Element {
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">{children}</div>
-  );
+  return <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">{children}</div>;
 }
 
-// Predefined modules data
+// Icon SVGs as strings
+const icons = {
+  orchestrate: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>`,
+  migrator: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>`,
+  version: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`,
+  code: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>`,
+  writer: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>`,
+  ssms: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>`,
+  optimize: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>`,
+  comply: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>`,
+  convert: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>`,
+  standardize: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>`,
+  centralize: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>`,
+  anonymize: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"/></svg>`,
+  simulate: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>`,
+  test: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>`,
+  api: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>`,
+  audit: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>`,
+  send: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>`,
+  receive: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 4H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-2m-4 0v8m0 0l3-3m-3 3L9 9"/></svg>`,
+  containerize: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>`,
+  tenant: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>`,
+  encrypt: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>`,
+  converse: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>`,
+  agent: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>`,
+};
+
+// Colors for each module
+const colors = {
+  primary: '#7C3AED',
+  success: '#10B981',
+  warning: '#F59E0B',
+  error: '#EF4444',
+  info: '#3B82F6',
+  postgresql: '#336791',
+  sqlserver: '#CC2927',
+  teal: '#14B8A6',
+  indigo: '#6366F1',
+  pink: '#EC4899',
+  cyan: '#06B6D4',
+  orange: '#F97316',
+  lime: '#84CC16',
+  rose: '#F43F5E',
+};
+
+// All 23 modules
 export const modules: Module[] = [
+  // Core Platform (8 modules)
   {
-    id: 'orchestrator',
-    name: 'SQL Orchestrator',
-    tagline: 'Unified Monitoring & Compliance',
+    id: 'orchestrate',
+    name: 'SQL Orchestrate',
+    tagline: 'Unified Job & Check Management',
     description:
-      'Centralized monitoring, security auditing, and compliance checking with before/after context for change impact analysis.',
-    icon: (
-      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-        />
-      </svg>
-    ),
-    color: 'primary',
-    href: '/features/orchestrator/',
+      'Central hub for all database monitoring, job scheduling, and compliance checking. Manages Azure Functions, Lambda, GCP Cloud Functions, and cron jobs from one platform.',
+    icon: icons.orchestrate,
+    color: colors.primary,
+    href: '/features/orchestrate/',
     capabilities: [
-      'Multi-trigger check execution (scheduled, deployment, anomaly)',
+      'Unified scheduler for Azure Functions, Lambda, cron',
+      'Multi-trigger execution (scheduled, deployment, anomaly)',
       'Performance, security, and compliance checks',
       'Schema snapshots for before/after comparison',
-      'Agent-based distributed collection',
-      'Automated compliance evidence gathering',
+      'Dashboard integration with SQL Monitor',
     ],
   },
   {
@@ -159,17 +152,8 @@ export const modules: Module[] = [
     tagline: 'Database-First Migrations',
     description:
       'Generate code from your database, not the reverse. Auto-generate Dapper models, TypeScript types, and versioned migrations.',
-    icon: (
-      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
-        />
-      </svg>
-    ),
-    color: 'success',
+    icon: icons.migrator,
+    color: colors.success,
     href: '/features/migrator/',
     capabilities: [
       'Database-first schema capture',
@@ -185,17 +169,8 @@ export const modules: Module[] = [
     tagline: 'Git for Your Database',
     description:
       'Track every change to every database object. Full history, blame, diff, and rollback for stored procedures, views, and more.',
-    icon: (
-      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-        />
-      </svg>
-    ),
-    color: 'warning',
+    icon: icons.version,
+    color: colors.warning,
     href: '/features/version/',
     capabilities: [
       'Object-level version history',
@@ -211,17 +186,8 @@ export const modules: Module[] = [
     tagline: 'Swagger for Databases',
     description:
       'Automated code review, AI-powered data dictionary, and release notes generation. Document your database like an API.',
-    icon: (
-      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-        />
-      </svg>
-    ),
-    color: 'postgresql',
+    icon: icons.code,
+    color: colors.info,
     href: '/features/code/',
     capabilities: [
       'AI-inferred column descriptions',
@@ -237,17 +203,8 @@ export const modules: Module[] = [
     tagline: 'AI DDL & SP Generation',
     description:
       'Beyond text-to-SQL. Generate complete stored procedures, views, functions, and triggers with proper error handling and transactions.',
-    icon: (
-      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-        />
-      </svg>
-    ),
-    color: 'primary',
+    icon: icons.writer,
+    color: colors.indigo,
     href: '/features/writer/',
     capabilities: [
       'Generate complete stored procedures',
@@ -263,17 +220,8 @@ export const modules: Module[] = [
     tagline: 'AI in Your IDE',
     description:
       'Bring SQL2.AI directly into SQL Server Management Studio. Inline AI suggestions, query optimization, and execution plan analysis.',
-    icon: (
-      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-        />
-      </svg>
-    ),
-    color: 'sqlserver',
+    icon: icons.ssms,
+    color: colors.sqlserver,
     href: '/features/ssms/',
     capabilities: [
       'Inline AI query completions',
@@ -290,17 +238,8 @@ export const modules: Module[] = [
     tagline: 'AI-Driven Performance',
     description:
       'Deep analysis of Query Store, wait statistics, and execution plans. Get prioritized remediation with one-click fixes.',
-    icon: (
-      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M13 10V3L4 14h7v7l9-11h-7z"
-        />
-      </svg>
-    ),
-    color: 'warning',
+    icon: icons.optimize,
+    color: colors.orange,
     href: '/features/optimize/',
     capabilities: [
       'Query Store analysis',
@@ -316,17 +255,8 @@ export const modules: Module[] = [
     tagline: 'SOC2, HIPAA, GDPR & More',
     description:
       'Automated compliance checking at the database level. Scan actual data for PII/PHI with Presidio integration.',
-    icon: (
-      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-        />
-      </svg>
-    ),
-    color: 'error',
+    icon: icons.comply,
+    color: colors.error,
     href: '/features/comply/',
     capabilities: [
       'SOC 2 Type I & II controls',
@@ -335,5 +265,314 @@ export const modules: Module[] = [
       'PCI-DSS cardholder checks',
       'Presidio PII scanning',
     ],
+  },
+
+  // Migration & Conversion (2 modules)
+  {
+    id: 'convert',
+    name: 'SQL Convert',
+    tagline: 'Cross-Platform Migration',
+    description:
+      'AI-powered migration between SQL Server (On-Prem, MI, Azure SQL) and PostgreSQL. Converts Agent jobs to Azure Functions, handles cross-DB queries.',
+    icon: icons.convert,
+    color: colors.teal,
+    href: '/features/convert/',
+    capabilities: [
+      'SQL Server ↔ PostgreSQL conversion',
+      'Agent jobs → Azure Functions',
+      'Cross-database query resolution',
+      'xp_cmdshell replacement',
+      'Plan-Execute-Test-Integrate workflow',
+    ],
+  },
+  {
+    id: 'containerize',
+    name: 'SQL Containerize',
+    tagline: 'Docker & Kubernetes Migration',
+    description:
+      'Migrate databases from on-prem or cloud VMs to Docker, Kubernetes (AKS/EKS/GKE), or cloud container services.',
+    icon: icons.containerize,
+    color: colors.cyan,
+    href: '/features/containerize/',
+    capabilities: [
+      'Docker Compose generation',
+      'Kubernetes StatefulSet configs',
+      'Agent jobs → K8s CronJobs',
+      'Zero-downtime migration',
+      'Multi-cloud support (Azure, AWS, GCP)',
+    ],
+    comingSoon: true,
+  },
+
+  // Data Quality (3 modules)
+  {
+    id: 'standardize',
+    name: 'SQL Standardize',
+    tagline: 'Database Standards Enforcement',
+    description:
+      'Enforce naming conventions, coding standards, and structural patterns. Analyze and auto-fix databases to meet your standards.',
+    icon: icons.standardize,
+    color: colors.lime,
+    href: '/features/standardize/',
+    capabilities: [
+      'Naming convention enforcement',
+      'Coding standards checking',
+      'Normalization analysis',
+      'View vs table recommendations',
+      'Auto-fix generation',
+    ],
+  },
+  {
+    id: 'anonymize',
+    name: 'SQL Anonymize',
+    tagline: 'Secure Clean Room Data',
+    description:
+      'Create clean room environments with realistic data that bears no resemblance to source. Full privacy with FK integrity preserved.',
+    icon: icons.anonymize,
+    color: colors.pink,
+    href: '/features/anonymize/',
+    capabilities: [
+      'Presidio-powered PII detection',
+      'K-anonymity validation',
+      'Consistent fake data generation',
+      'FK relationship preservation',
+      'Re-identification prevention',
+    ],
+  },
+  {
+    id: 'simulate',
+    name: 'SQL Simulate',
+    tagline: 'Synthetic Data Generation',
+    description:
+      'Generate realistic synthetic data from metadata without source access. Perfect for new systems, load testing, and demos.',
+    icon: icons.simulate,
+    color: colors.rose,
+    href: '/features/simulate/',
+    capabilities: [
+      'AI-powered column understanding',
+      'Distribution modeling',
+      'FK-aware generation',
+      'Edge case scenarios',
+      'Scalable data volumes',
+    ],
+  },
+
+  // Data Movement (2 modules)
+  {
+    id: 'centralize',
+    name: 'SQL Centralize',
+    tagline: 'Multi-Tier Replication',
+    description:
+      'FK-aware data replication, consolidation, and ETL. Supports SQL Server and PostgreSQL with minimal source impact.',
+    icon: icons.centralize,
+    color: colors.postgresql,
+    href: '/features/centralize/',
+    capabilities: [
+      'FK-sensitive sync ordering',
+      'Real-time and batch modes',
+      'Bidirectional replication',
+      'Multi-tier architectures',
+      'Cross-platform (SQL ↔ PG)',
+    ],
+  },
+
+  // Developer Tools (3 modules)
+  {
+    id: 'test',
+    name: 'SQL Test',
+    tagline: 'AI-Powered DB Testing',
+    description:
+      'Generate comprehensive unit and integration tests using tSQLt, pgTAP, and application testing frameworks.',
+    icon: icons.test,
+    color: colors.success,
+    href: '/features/test/',
+    capabilities: [
+      'tSQLt test generation',
+      'pgTAP test generation',
+      'Multi-step integration tests',
+      'Constraint and trigger testing',
+      'Performance regression tests',
+    ],
+  },
+  {
+    id: 'api',
+    name: 'SQL API',
+    tagline: 'Data Layer Generation',
+    description:
+      'Generate complete APIs in FastAPI, .NET Core, Next.js, or Node.js with type-safe clients. Native SP integration with SAGA pattern support.',
+    icon: icons.api,
+    color: colors.indigo,
+    href: '/features/api/',
+    capabilities: [
+      'FastAPI, .NET, Node.js generation',
+      'Type-safe React/Vue clients',
+      'Stored procedure integration',
+      'SAGA pattern transactions',
+      'Auto-sync with schema changes',
+    ],
+  },
+  {
+    id: 'converse',
+    name: 'SQL Converse',
+    tagline: 'Bidirectional AI Bridge',
+    description:
+      'Two-way conversation between databases and AI using LangChain/LiteLLM. Table-based middleware with PII filtering ensures no data leaks.',
+    icon: icons.converse,
+    color: colors.primary,
+    href: '/features/converse/',
+    capabilities: [
+      'LangChain/LangGraph integration',
+      'LiteLLM model flexibility',
+      'Table-based request/response',
+      'Presidio PII filtering',
+      'Multi-turn conversations',
+    ],
+    comingSoon: true,
+  },
+
+  // Security & Communication (4 modules)
+  {
+    id: 'audit',
+    name: 'SQL Audit',
+    tagline: 'Tamper-Proof Audit Logs',
+    description:
+      'Blockchain-level tamper proofing for audit logs. Integrates with telemetry, AI severity scoring, and Presidio data leak detection.',
+    icon: icons.audit,
+    color: colors.error,
+    href: '/features/audit/',
+    capabilities: [
+      'Blockchain-level tamper proofing',
+      'AI-powered severity scoring',
+      'Presidio data leak detection',
+      'Telemetry integration',
+      'SQL Monitor dashboard',
+    ],
+  },
+  {
+    id: 'encrypt',
+    name: 'SQL Encrypt',
+    tagline: 'Automated Key Management',
+    description:
+      'Zero-touch encryption management. Automated key rotation, vault integration, TDE, and Always Encrypted with no human intervention.',
+    icon: icons.encrypt,
+    color: colors.warning,
+    href: '/features/encrypt/',
+    capabilities: [
+      'Automated key rotation',
+      'Azure/AWS/HashiCorp vault',
+      'TDE management',
+      'Always Encrypted columns',
+      'Compliance reporting',
+    ],
+  },
+  {
+    id: 'tenant',
+    name: 'SQL Tenant',
+    tagline: 'Multi-Tenant RLS',
+    description:
+      'Supabase-style multi-tenancy with Clerk integration. Standardized RLS patterns eliminate complexity while ensuring complete isolation.',
+    icon: icons.tenant,
+    color: colors.teal,
+    href: '/features/tenant/',
+    capabilities: [
+      'Clerk authentication integration',
+      'Standardized RLS policies',
+      'Automatic tenant filtering',
+      'Cross-platform (SQL + PG)',
+      'Tenant onboarding automation',
+    ],
+    comingSoon: true,
+  },
+  {
+    id: 'send',
+    name: 'SQL Send',
+    tagline: 'Database Messaging',
+    description:
+      'Unified email and SMS from database via SendGrid, Resend, Twilio. Transactional outbox pattern ensures reliable delivery.',
+    icon: icons.send,
+    color: colors.info,
+    href: '/features/send/',
+    capabilities: [
+      'SendGrid, Resend, Twilio',
+      'Transactional outbox pattern',
+      'Template support',
+      'Delivery tracking',
+      'Native SQL/PG procedures',
+    ],
+  },
+  {
+    id: 'receive',
+    name: 'SQL Receive',
+    tagline: 'Secure Inbound Gateway',
+    description:
+      'Unified readers for files, APIs, and emails with malware scanning, SQL injection prevention, and PII detection.',
+    icon: icons.receive,
+    color: colors.cyan,
+    href: '/features/receive/',
+    capabilities: [
+      'ClamAV/VirusTotal scanning',
+      'SQL injection prevention',
+      'PII detection (Presidio)',
+      'File integrity validation',
+      'SFTP, S3, API, email sources',
+    ],
+  },
+
+  // Autonomous Operations (1 module)
+  {
+    id: 'agent',
+    name: 'SQL Agent',
+    tagline: 'Autonomous AI DBA',
+    description:
+      'Agentic AI that autonomously performs DBA, analyst, auditor, and optimizer tasks based on context and compliance rather than rigid schedules.',
+    icon: icons.agent,
+    color: colors.primary,
+    href: '/features/agent/',
+    capabilities: [
+      'AI-driven index management',
+      'Proactive compliance detection',
+      'Autonomous backup optimization',
+      'Human-in-the-loop approval workflows',
+      'Configurable autonomy levels',
+    ],
+  },
+];
+
+// Group modules by category for features page
+export const moduleCategories = [
+  {
+    name: 'Core Platform',
+    description: 'Essential database development and monitoring tools',
+    modules: ['orchestrate', 'migrator', 'version', 'code', 'writer', 'ssms', 'optimize', 'comply'],
+  },
+  {
+    name: 'Migration & Containerization',
+    description: 'Move databases across platforms and environments',
+    modules: ['convert', 'containerize'],
+  },
+  {
+    name: 'Data Quality & Testing',
+    description: 'Ensure data integrity, standards, and reliability',
+    modules: ['standardize', 'anonymize', 'simulate', 'test'],
+  },
+  {
+    name: 'Data Movement',
+    description: 'Replicate and synchronize data across systems',
+    modules: ['centralize'],
+  },
+  {
+    name: 'Developer Experience',
+    description: 'Accelerate development with AI-powered tools',
+    modules: ['api', 'converse'],
+  },
+  {
+    name: 'Security & Communication',
+    description: 'Protect data and enable secure messaging',
+    modules: ['audit', 'encrypt', 'tenant', 'send', 'receive'],
+  },
+  {
+    name: 'Autonomous Operations',
+    description: 'AI agents that autonomously manage database operations',
+    modules: ['agent'],
   },
 ];

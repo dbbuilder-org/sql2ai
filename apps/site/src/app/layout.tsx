@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Header } from '../components/layout/Header';
 import { Footer } from '../components/layout/Footer';
+import { DatabaseDialectProvider } from '../contexts/DatabaseDialectContext';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -68,9 +69,11 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className="min-h-screen bg-bg-base text-text-primary antialiased">
-        <Header />
-        <main>{children}</main>
-        <Footer />
+        <DatabaseDialectProvider>
+          <Header />
+          <main>{children}</main>
+          <Footer />
+        </DatabaseDialectProvider>
       </body>
     </html>
   );

@@ -1,7 +1,7 @@
 export { Hero } from './Hero';
 export { LifecycleIndicator } from './LifecycleIndicator';
 export { FeatureCard, FeatureGrid } from './FeatureCard';
-export { ModuleCard, ModuleGrid, modules } from './ModuleCard';
+export { ModuleCard, ModuleGrid, modules, moduleCategories } from './ModuleCard';
 export type { Module } from './ModuleCard';
 export { PhilosophySection } from './PhilosophySection';
 export { PlatformBridge } from './PlatformBridge';

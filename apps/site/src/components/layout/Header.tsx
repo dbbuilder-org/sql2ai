@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { DatabaseDialectToggle } from '../DatabaseDialectToggle';
 
 const navigation = [
   { name: 'Features', href: '/features' },
@@ -40,6 +41,8 @@ export function Header(): JSX.Element {
 
           {/* Desktop CTAs */}
           <div className="hidden md:flex items-center gap-4">
+            {/* Database Dialect Toggle */}
+            <DatabaseDialectToggle variant="compact" />
             <Link
               href="/login"
               className="text-sm font-medium text-text-secondary hover:text-text-primary transition-colors"
@@ -85,6 +88,11 @@ export function Header(): JSX.Element {
                 </Link>
               ))}
               <div className="flex flex-col gap-3 pt-4 border-t border-border-subtle">
+                {/* Mobile Dialect Toggle */}
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-text-muted">Examples in:</span>
+                  <DatabaseDialectToggle variant="compact" />
+                </div>
                 <Link
                   href="/login"
                   className="text-base font-medium text-text-secondary hover:text-text-primary"
