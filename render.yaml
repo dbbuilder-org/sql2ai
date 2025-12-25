@@ -8,13 +8,13 @@ services:
     runtime: node
     region: oregon
     plan: free
-    buildCommand: npm install && npx nx build site
-    startCommand: npx nx start site --port $PORT
+    buildCommand: npm install && NODE_OPTIONS="--max-old-space-size=1536" npx nx build site --configuration=production && cp -r apps/site/public dist/apps/site/.next/standalone/apps/site/ && cp -r dist/apps/site/.next/static dist/apps/site/.next/standalone/apps/site/.next/
+    startCommand: node dist/apps/site/.next/standalone/apps/site/server.js
     envVars:
       - key: NODE_ENV
         value: production
-      - key: PORT
-        value: 3001
+      - key: NODE_OPTIONS
+        value: --max-old-space-size=1536
     rootDir: .
     buildFilter:
       paths:
