@@ -5,7 +5,7 @@ services:
   # Marketing Site (Next.js Static Export)
   - type: static_site
     name: sql2ai-site
-    buildCommand: npm install && NODE_OPTIONS="--max-old-space-size=1536" npx nx build site --configuration=production
+    buildCommand: npm install && NEXT_PUBLIC_BUILD_VERSION=$(date -u +"%Y.%m.%d-%H%M") NODE_OPTIONS="--max-old-space-size=1536" npx nx build site --configuration=production
     staticPublishPath: dist/apps/site/.next
     envVars:
       - key: NODE_ENV

@@ -151,9 +151,14 @@ export function Footer(): JSX.Element {
         {/* Bottom */}
         <div className="mt-12 pt-8 border-t border-border-subtle">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-small text-text-muted">
-              &copy; {new Date().getFullYear()} SQL2.AI. All rights reserved.
-            </p>
+            <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4">
+              <p className="text-small text-text-muted">
+                &copy; {new Date().getFullYear()} SQL2.AI. All rights reserved.
+              </p>
+              <span className="text-xs text-text-muted/50">
+                v{process.env.NEXT_PUBLIC_BUILD_VERSION || '1.0.0'}
+              </span>
+            </div>
             <div className="flex items-center gap-6">
               <span className="badge-postgresql">PostgreSQL</span>
               <span className="badge-sqlserver">SQL Server</span>
