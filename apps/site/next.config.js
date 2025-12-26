@@ -18,6 +18,9 @@ const nextConfig = {
     unoptimized: true,
   },
   trailingSlash: true,
+  env: {
+    NEXT_PUBLIC_RENDER_GIT_COMMIT: process.env.NEXT_PUBLIC_RENDER_GIT_COMMIT || 'dev',
+  },
 };
 
 const plugins = [withNx];
