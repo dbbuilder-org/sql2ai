@@ -1,0 +1,229 @@
+{
+  "name": "sql2ai",
+  "displayName": "SQL2.AI",
+  "description": "AI-powered database development assistant for SQL Server and PostgreSQL",
+  "version": "0.1.0",
+  "publisher": "sql2ai",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Machine Learning",
+    "Other"
+  ],
+  "keywords": [
+    "sql",
+    "database",
+    "ai",
+    "postgresql",
+    "sql server",
+    "query optimization"
+  ],
+  "activationEvents": [
+    "onLanguage:sql",
+    "onLanguage:plpgsql"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "sql2ai.optimizeQuery",
+        "title": "SQL2.AI: Optimize Query",
+        "icon": "$(zap)"
+      },
+      {
+        "command": "sql2ai.explainQuery",
+        "title": "SQL2.AI: Explain Query",
+        "icon": "$(info)"
+      },
+      {
+        "command": "sql2ai.reviewCode",
+        "title": "SQL2.AI: Review SQL Code",
+        "icon": "$(checklist)"
+      },
+      {
+        "command": "sql2ai.generateFromPrompt",
+        "title": "SQL2.AI: Generate SQL from Prompt",
+        "icon": "$(sparkle)"
+      },
+      {
+        "command": "sql2ai.generateCrud",
+        "title": "SQL2.AI: Generate CRUD Procedures",
+        "icon": "$(database)"
+      },
+      {
+        "command": "sql2ai.analyzeExecutionPlan",
+        "title": "SQL2.AI: Analyze Execution Plan",
+        "icon": "$(graph)"
+      },
+      {
+        "command": "sql2ai.formatSql",
+        "title": "SQL2.AI: Format SQL",
+        "icon": "$(symbol-structure)"
+      },
+      {
+        "command": "sql2ai.connect",
+        "title": "SQL2.AI: Connect to Database",
+        "icon": "$(plug)"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "sql2ai.optimizeQuery",
+        "key": "ctrl+alt+o",
+        "mac": "cmd+alt+o",
+        "when": "editorTextFocus && editorLangId == sql"
+      },
+      {
+        "command": "sql2ai.explainQuery",
+        "key": "ctrl+alt+e",
+        "mac": "cmd+alt+e",
+        "when": "editorTextFocus && editorLangId == sql"
+      },
+      {
+        "command": "sql2ai.reviewCode",
+        "key": "ctrl+alt+r",
+        "mac": "cmd+alt+r",
+        "when": "editorTextFocus && editorLangId == sql"
+      },
+      {
+        "command": "sql2ai.generateFromPrompt",
+        "key": "ctrl+alt+g",
+        "mac": "cmd+alt+g",
+        "when": "editorTextFocus && editorLangId == sql"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "submenu": "sql2ai.submenu",
+          "group": "sql2ai",
+          "when": "editorLangId == sql || editorLangId == plpgsql"
+        }
+      ],
+      "sql2ai.submenu": [
+        {
+          "command": "sql2ai.optimizeQuery",
+          "group": "1_query@1"
+        },
+        {
+          "command": "sql2ai.explainQuery",
+          "group": "1_query@2"
+        },
+        {
+          "command": "sql2ai.reviewCode",
+          "group": "1_query@3"
+        },
+        {
+          "command": "sql2ai.generateFromPrompt",
+          "group": "2_generate@1"
+        },
+        {
+          "command": "sql2ai.generateCrud",
+          "group": "2_generate@2"
+        },
+        {
+          "command": "sql2ai.analyzeExecutionPlan",
+          "group": "3_analyze@1"
+        },
+        {
+          "command": "sql2ai.formatSql",
+          "group": "4_format@1"
+        }
+      ]
+    },
+    "submenus": [
+      {
+        "id": "sql2ai.submenu",
+        "label": "SQL2.AI"
+      }
+    ],
+    "configuration": {
+      "title": "SQL2.AI",
+      "properties": {
+        "sql2ai.apiUrl": {
+          "type": "string",
+          "default": "https://api.sql2.ai",
+          "description": "SQL2.AI API URL"
+        },
+        "sql2ai.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "Your SQL2.AI API key"
+        },
+        "sql2ai.defaultDatabase": {
+          "type": "string",
+          "enum": ["postgresql", "sqlserver"],
+          "default": "postgresql",
+          "description": "Default database type for new files"
+        },
+        "sql2ai.autoFormat": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically format SQL on save"
+        },
+        "sql2ai.showInlineHints": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show inline optimization hints"
+        }
+      }
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "sql2ai",
+          "title": "SQL2.AI",
+          "icon": "resources/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "sql2ai": [
+        {
+          "id": "sql2ai.connections",
+          "name": "Connections"
+        },
+        {
+          "id": "sql2ai.history",
+          "name": "Query History"
+        },
+        {
+          "id": "sql2ai.snippets",
+          "name": "AI Snippets"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile",
+    "test": "node ./out/test/runTest.js",
+    "lint": "eslint src --ext ts",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^6.15.0",
+    "@typescript-eslint/parser": "^6.15.0",
+    "eslint": "^8.56.0",
+    "typescript": "^5.3.3",
+    "@vscode/vsce": "^2.22.0"
+  },
+  "dependencies": {
+    "axios": "^1.6.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dbbuilder-org/sql2ai.git"
+  },
+  "icon": "resources/icon.png",
+  "galleryBanner": {
+    "color": "#1e293b",
+    "theme": "dark"
+  }
+}
