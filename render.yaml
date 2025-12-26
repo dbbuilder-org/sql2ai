@@ -82,7 +82,7 @@ services:
 databases:
   - name: sql2ai-db
     databaseName: sql2ai
-    plan: basic_256mb
+    plan: free
     postgresMajorVersion: "15"
 
 # ===========================================
