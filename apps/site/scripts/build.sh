@@ -2,21 +2,25 @@
 # Build script for SQL2.AI site
 # Sets NEXT_PUBLIC_RENDER_GIT_COMMIT from Render env or git
 
-echo "Debug: RENDER_GIT_COMMIT=$RENDER_GIT_COMMIT"
-echo "Debug: RENDER=$RENDER"
+echo "=== Build Environment ==="
+echo "RENDER_GIT_COMMIT: ${RENDER_GIT_COMMIT:-not set}"
+echo "RENDER: ${RENDER:-not set}"
+echo "PWD: $PWD"
 
 # Try multiple sources for version
 if [ -n "$RENDER_GIT_COMMIT" ]; then
   VERSION="${RENDER_GIT_COMMIT:0:7}"
 elif [ -d .git ]; then
-  VERSION=$(git rev-parse --short HEAD 2>/dev/null)
-elif [ -n "$RENDER_GIT_BRANCH" ]; then
-  VERSION="$RENDER_GIT_BRANCH"
+  VERSION=$(git rev-parse --short HEAD 2>/dev/null || echo "nogit")
 else
-  VERSION="build-$(date +%m%d%H%M)"
+  VERSION="b$(date +%m%d%H%M)"
 fi
 
-export NEXT_PUBLIC_RENDER_GIT_COMMIT="$VERSION"
-echo "Building with version: $NEXT_PUBLIC_RENDER_GIT_COMMIT"
+echo "VERSION: $VERSION"
 
-NODE_OPTIONS="--max-old-space-size=1536" npx nx build site --configuration=production
+# Write to .env.local for Next.js to pick up
+echo "NEXT_PUBLIC_RENDER_GIT_COMMIT=$VERSION" > apps/site/.env.local
+cat apps/site/.env.local
+
+echo "=== Starting NX Build ==="
+NODE_OPTIONS="--max-old-space-size=1536" npx nx build site --configuration=production --skip-nx-cache

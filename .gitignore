@@ -64,3 +64,4 @@ packages
 .cache
 tmp
 temp
+apps/site/.env.local
