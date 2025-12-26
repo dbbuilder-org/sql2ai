@@ -156,7 +156,7 @@ export function Footer(): JSX.Element {
                 &copy; {new Date().getFullYear()} SQL2.AI. All rights reserved.
               </p>
               <span className="text-xs text-text-muted/50">
-                v{process.env.NEXT_PUBLIC_BUILD_VERSION || '1.0.0'}
+                {process.env.NEXT_PUBLIC_RENDER_GIT_COMMIT?.slice(0, 7) || 'dev'}
               </span>
             </div>
             <div className="flex items-center gap-6">
