@@ -8,14 +8,24 @@ function getBuildVersion() {
   if (process.env.NEXT_PUBLIC_RENDER_GIT_COMMIT) {
     return process.env.NEXT_PUBLIC_RENDER_GIT_COMMIT;
   }
-  // Try git
-  try {
-    return execSync('git rev-parse --short HEAD', { encoding: 'utf-8' }).trim();
-  } catch {
-    // Fallback to timestamp
-    const d = new Date();
-    return `b${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}${String(d.getHours()).padStart(2,'0')}${String(d.getMinutes()).padStart(2,'0')}`;
+  // Try RENDER_GIT_COMMIT directly
+  if (process.env.RENDER_GIT_COMMIT) {
+    return process.env.RENDER_GIT_COMMIT.slice(0, 7);
   }
+  // Try git (use -C to find repo root)
+  try {
+    // Try current dir, then parent dirs
+    const result = execSync('git rev-parse --short HEAD 2>/dev/null || git -C ../.. rev-parse --short HEAD 2>/dev/null', {
+      encoding: 'utf-8',
+      stdio: ['pipe', 'pipe', 'pipe']
+    }).trim();
+    if (result) return result;
+  } catch {
+    // Git not available
+  }
+  // Fallback to timestamp
+  const d = new Date();
+  return `b${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}${String(d.getHours()).padStart(2,'0')}${String(d.getMinutes()).padStart(2,'0')}`;
 }
 
 const buildVersion = getBuildVersion();
