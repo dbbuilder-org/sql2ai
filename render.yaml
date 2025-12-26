@@ -76,11 +76,20 @@ services:
         - nx.json
     # Custom domain: app.sql2.ai
 
-  # ===========================================
-  # Marketing Site (Next.js Static Export)
-  # ===========================================
-  - type: static_site
-    name: sql2ai-site
+# ===========================================
+# Databases
+# ===========================================
+databases:
+  - name: sql2ai-db
+    databaseName: sql2ai
+    plan: starter
+    postgresMajorVersion: "15"
+
+# ===========================================
+# Static Sites
+# ===========================================
+staticSites:
+  - name: sql2ai-site
     buildCommand: npm install && bash apps/site/scripts/build.sh
     branch: main
     staticPublishPath: dist/apps/site/.next
@@ -104,12 +113,3 @@ services:
         source: /*
         destination: /index.html
     # Custom domains: sql2.ai, www.sql2.ai
-
-# ===========================================
-# Databases
-# ===========================================
-databases:
-  - name: sql2ai-db
-    databaseName: sql2ai
-    plan: starter
-    postgresMajorVersion: "15"
