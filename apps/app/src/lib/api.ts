@@ -1,10 +1,13 @@
 /**
  * API Client for SQL2.AI Backend
  *
- * Uses Next.js rewrite proxy: /api/v1/* -> backend
+ * In production: Uses NEXT_PUBLIC_API_URL environment variable
+ * In development: Uses /api/v1 proxy to localhost:8000
  */
 
-const API_BASE = '/api/v1';
+const API_BASE = process.env.NEXT_PUBLIC_API_URL
+  ? `${process.env.NEXT_PUBLIC_API_URL}/api`
+  : '/api/v1';
 
 interface ApiError {
   detail: string;
@@ -26,6 +29,7 @@ class ApiClient {
 
     const config: RequestInit = {
       ...options,
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
         ...options.headers,

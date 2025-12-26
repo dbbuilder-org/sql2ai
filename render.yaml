@@ -11,6 +11,7 @@ services:
     dockerfilePath: ./apps/api/Dockerfile
     dockerContext: .
     branch: main
+    plan: starter
     healthCheckPath: /health
     envVars:
       - key: SQL2AI_ENVIRONMENT
@@ -20,11 +21,6 @@ services:
       - key: SQL2AI_DATABASE_URL
         fromDatabase:
           name: sql2ai-db
-          property: connectionString
-      - key: SQL2AI_REDIS_URL
-        fromService:
-          name: sql2ai-redis
-          type: redis
           property: connectionString
       - key: SQL2AI_SECRET_KEY
         generateValue: true
@@ -42,11 +38,43 @@ services:
         sync: false
       - key: SQL2AI_SENTRY_DSN
         sync: false
+      - key: SQL2AI_CORS_ORIGINS
+        value: "https://app.sql2.ai,https://sql2.ai,http://localhost:3000"
     buildFilter:
       paths:
         - apps/api/**
         - libs/shared/**
     # Custom domain: api.sql2.ai
+
+  # ===========================================
+  # Dashboard App (Next.js)
+  # ===========================================
+  - type: web
+    name: sql2ai-app
+    runtime: node
+    buildCommand: npm install && npx nx build app --prod
+    startCommand: npx nx start app
+    branch: main
+    plan: starter
+    healthCheckPath: /
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NEXT_PUBLIC_API_URL
+        value: https://api.sql2.ai
+      - key: NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+        sync: false
+      - key: CLERK_SECRET_KEY
+        sync: false
+      - key: NEXT_PUBLIC_SENTRY_DSN
+        sync: false
+    buildFilter:
+      paths:
+        - apps/app/**
+        - libs/**
+        - package.json
+        - nx.json
+    # Custom domain: app.sql2.ai
 
   # ===========================================
   # Marketing Site (Next.js Static Export)
@@ -85,8 +113,3 @@ databases:
     databaseName: sql2ai
     plan: starter
     postgresMajorVersion: "15"
-
-# ===========================================
-# Redis
-# ===========================================
-# Note: Redis is a paid add-on, configure in dashboard if needed
