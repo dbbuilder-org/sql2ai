@@ -10,6 +10,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from sql2ai_api.db.session import get_db
 from sql2ai_api.models.connection import Connection, DatabaseType
+from sql2ai_api.dependencies.auth import get_tenant_id, get_current_user
+from sql2ai_api.services.connections import ConnectionService
 
 router = APIRouter()
 
@@ -118,22 +120,18 @@ class SchemaListResponse(BaseModel):
 async def list_connections(
     skip: int = 0,
     limit: int = 100,
+    include_inactive: bool = False,
+    tenant_id: str = Depends(get_tenant_id),
+    user_id: str = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ) -> ConnectionListResponse:
     """List all database connections for the current tenant."""
-    # TODO: Filter by tenant_id from auth context
-    result = await db.execute(
-        select(Connection)
-        .where(Connection.deleted_at.is_(None))
-        .offset(skip)
-        .limit(limit)
+    service = ConnectionService(db, tenant_id, user_id)
+    connections, total = await service.list_connections(
+        skip=skip,
+        limit=limit,
+        include_inactive=include_inactive,
     )
-    connections = result.scalars().all()
-
-    count_result = await db.execute(
-        select(Connection).where(Connection.deleted_at.is_(None))
-    )
-    total = len(count_result.scalars().all())
 
     return ConnectionListResponse(
         connections=[ConnectionResponse.model_validate(c) for c in connections],
@@ -144,38 +142,28 @@ async def list_connections(
 @router.post("/", response_model=ConnectionResponse, status_code=status.HTTP_201_CREATED)
 async def create_connection(
     connection: ConnectionCreate,
+    tenant_id: str = Depends(get_tenant_id),
+    user_id: str = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ) -> ConnectionResponse:
-    """Create a new database connection."""
-    # TODO: Get tenant_id and user_id from auth context
-    tenant_id = "00000000-0000-0000-0000-000000000000"  # Placeholder
-    user_id = "00000000-0000-0000-0000-000000000000"  # Placeholder
+    """Create a new database connection with encrypted credentials."""
+    service = ConnectionService(db, tenant_id, user_id)
 
-    # TODO: Store password securely in Vault
-    password_secret_id = None  # Would be Vault secret ID
-
-    db_connection = Connection(
-        tenant_id=tenant_id,
+    db_connection = await service.create_connection(
         name=connection.name,
-        description=connection.description,
         db_type=connection.db_type,
         host=connection.host,
         port=connection.port,
         database=connection.database,
         username=connection.username,
-        password_secret_id=password_secret_id,
-        trust_server_certificate=connection.trust_server_certificate,
-        encrypt=connection.encrypt,
-        ssl_mode=connection.ssl_mode,
+        password=connection.password.get_secret_value(),
+        description=connection.description,
         environment=connection.environment,
         tags=connection.tags,
-        created_by=user_id,
-        updated_by=user_id,
+        ssl_mode=connection.ssl_mode,
+        trust_server_certificate=connection.trust_server_certificate,
+        encrypt=connection.encrypt,
     )
-
-    db.add(db_connection)
-    await db.commit()
-    await db.refresh(db_connection)
 
     return ConnectionResponse.model_validate(db_connection)
 
@@ -264,16 +252,13 @@ async def test_connection(
 @router.get("/{connection_id}", response_model=ConnectionResponse)
 async def get_connection(
     connection_id: str,
+    tenant_id: str = Depends(get_tenant_id),
+    user_id: str = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ) -> ConnectionResponse:
     """Get connection details by ID."""
-    result = await db.execute(
-        select(Connection).where(
-            Connection.id == connection_id,
-            Connection.deleted_at.is_(None),
-        )
-    )
-    connection = result.scalar_one_or_none()
+    service = ConnectionService(db, tenant_id, user_id)
+    connection = await service.get_connection(connection_id)
 
     if not connection:
         raise HTTPException(
@@ -288,35 +273,25 @@ async def get_connection(
 async def update_connection(
     connection_id: str,
     update: ConnectionUpdate,
+    tenant_id: str = Depends(get_tenant_id),
+    user_id: str = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ) -> ConnectionResponse:
     """Update a database connection."""
-    result = await db.execute(
-        select(Connection).where(
-            Connection.id == connection_id,
-            Connection.deleted_at.is_(None),
-        )
-    )
-    connection = result.scalar_one_or_none()
+    service = ConnectionService(db, tenant_id, user_id)
+
+    # Prepare update data
+    update_data = update.model_dump(exclude_unset=True, exclude={"password"})
+    if update.password:
+        update_data["password"] = update.password.get_secret_value()
+
+    connection = await service.update_connection(connection_id, **update_data)
 
     if not connection:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Connection not found",
         )
-
-    # Update fields
-    update_data = update.model_dump(exclude_unset=True, exclude={"password"})
-    for field, value in update_data.items():
-        setattr(connection, field, value)
-
-    # Handle password update separately (would store in Vault)
-    if update.password:
-        # TODO: Store new password in Vault
-        pass
-
-    await db.commit()
-    await db.refresh(connection)
 
     return ConnectionResponse.model_validate(connection)
 
@@ -324,41 +299,31 @@ async def update_connection(
 @router.delete("/{connection_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_connection(
     connection_id: str,
+    tenant_id: str = Depends(get_tenant_id),
+    user_id: str = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ) -> None:
     """Soft delete a database connection."""
-    result = await db.execute(
-        select(Connection).where(
-            Connection.id == connection_id,
-            Connection.deleted_at.is_(None),
-        )
-    )
-    connection = result.scalar_one_or_none()
+    service = ConnectionService(db, tenant_id, user_id)
+    success = await service.delete_connection(connection_id)
 
-    if not connection:
+    if not success:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Connection not found",
         )
-
-    # Soft delete
-    connection.deleted_at = datetime.utcnow()
-    await db.commit()
 
 
 @router.get("/{connection_id}/databases", response_model=DatabaseListResponse)
 async def list_databases(
     connection_id: str,
+    tenant_id: str = Depends(get_tenant_id),
+    user_id: str = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ) -> DatabaseListResponse:
     """List databases available on the connection."""
-    result = await db.execute(
-        select(Connection).where(
-            Connection.id == connection_id,
-            Connection.deleted_at.is_(None),
-        )
-    )
-    connection = result.scalar_one_or_none()
+    service = ConnectionService(db, tenant_id, user_id)
+    connection = await service.get_connection(connection_id)
 
     if not connection:
         raise HTTPException(
@@ -366,9 +331,42 @@ async def list_databases(
             detail="Connection not found",
         )
 
-    # TODO: Actually query the database for available databases
-    # This would require getting the password from Vault and connecting
+    # Get decrypted password and query databases
+    password = await service.get_decrypted_password(connection)
     databases: List[str] = []
+
+    if password:
+        try:
+            if connection.db_type == DatabaseType.POSTGRESQL:
+                import psycopg2
+                conn = psycopg2.connect(
+                    host=connection.host,
+                    port=connection.port,
+                    database=connection.database,
+                    user=connection.username,
+                    password=password,
+                    connect_timeout=10,
+                )
+                cursor = conn.cursor()
+                cursor.execute("SELECT datname FROM pg_database WHERE datistemplate = false ORDER BY datname")
+                databases = [row[0] for row in cursor.fetchall()]
+                conn.close()
+            elif connection.db_type == DatabaseType.SQLSERVER:
+                import pyodbc
+                conn_str = (
+                    f"DRIVER={{ODBC Driver 18 for SQL Server}};"
+                    f"SERVER={connection.host},{connection.port};"
+                    f"DATABASE=master;"
+                    f"UID={connection.username};"
+                    f"PWD={password};"
+                    f"TrustServerCertificate={'Yes' if connection.trust_server_certificate else 'No'};"
+                )
+                with pyodbc.connect(conn_str, timeout=10) as conn:
+                    cursor = conn.cursor()
+                    cursor.execute("SELECT name FROM sys.databases ORDER BY name")
+                    databases = [row[0] for row in cursor.fetchall()]
+        except Exception:
+            pass  # Return empty list on error
 
     return DatabaseListResponse(databases=databases)
 
@@ -376,16 +374,13 @@ async def list_databases(
 @router.get("/{connection_id}/schemas", response_model=SchemaListResponse)
 async def list_schemas(
     connection_id: str,
+    tenant_id: str = Depends(get_tenant_id),
+    user_id: str = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ) -> SchemaListResponse:
     """List schemas in the connection's database."""
-    result = await db.execute(
-        select(Connection).where(
-            Connection.id == connection_id,
-            Connection.deleted_at.is_(None),
-        )
-    )
-    connection = result.scalar_one_or_none()
+    service = ConnectionService(db, tenant_id, user_id)
+    connection = await service.get_connection(connection_id)
 
     if not connection:
         raise HTTPException(
@@ -393,7 +388,65 @@ async def list_schemas(
             detail="Connection not found",
         )
 
-    # TODO: Actually query the database for schemas
+    password = await service.get_decrypted_password(connection)
     schemas: List[str] = []
 
+    if password:
+        try:
+            if connection.db_type == DatabaseType.POSTGRESQL:
+                import psycopg2
+                conn = psycopg2.connect(
+                    host=connection.host,
+                    port=connection.port,
+                    database=connection.database,
+                    user=connection.username,
+                    password=password,
+                    connect_timeout=10,
+                )
+                cursor = conn.cursor()
+                cursor.execute("""
+                    SELECT schema_name FROM information_schema.schemata
+                    WHERE schema_name NOT IN ('pg_catalog', 'information_schema', 'pg_toast')
+                    ORDER BY schema_name
+                """)
+                schemas = [row[0] for row in cursor.fetchall()]
+                conn.close()
+            elif connection.db_type == DatabaseType.SQLSERVER:
+                import pyodbc
+                conn_str = (
+                    f"DRIVER={{ODBC Driver 18 for SQL Server}};"
+                    f"SERVER={connection.host},{connection.port};"
+                    f"DATABASE={connection.database};"
+                    f"UID={connection.username};"
+                    f"PWD={password};"
+                    f"TrustServerCertificate={'Yes' if connection.trust_server_certificate else 'No'};"
+                )
+                with pyodbc.connect(conn_str, timeout=10) as conn:
+                    cursor = conn.cursor()
+                    cursor.execute("SELECT name FROM sys.schemas ORDER BY name")
+                    schemas = [row[0] for row in cursor.fetchall()]
+        except Exception:
+            pass  # Return empty list on error
+
     return SchemaListResponse(schemas=schemas)
+
+
+@router.post("/{connection_id}/test", response_model=ConnectionTestResponse)
+async def test_saved_connection(
+    connection_id: str,
+    tenant_id: str = Depends(get_tenant_id),
+    user_id: str = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+) -> ConnectionTestResponse:
+    """Test an existing saved connection."""
+    service = ConnectionService(db, tenant_id, user_id)
+    connection = await service.get_connection(connection_id)
+
+    if not connection:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Connection not found",
+        )
+
+    result = await service.test_connection(connection)
+    return ConnectionTestResponse(**result)

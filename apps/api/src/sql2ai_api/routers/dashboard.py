@@ -2,9 +2,12 @@
 
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel
-from datetime import datetime, timedelta
+from typing import Optional
+from sqlalchemy.ext.asyncio import AsyncSession
 
-from sql2ai_api.dependencies.auth import get_current_user, get_tenant_id
+from sql2ai_api.db.session import get_db
+from sql2ai_api.dependencies.auth import get_tenant_id
+from sql2ai_api.services.dashboard import DashboardService
 
 router = APIRouter()
 
@@ -25,16 +28,32 @@ class RecentQuery(BaseModel):
     name: str
     sql: str
     execution_time_ms: int
-    executed_at: str
+    executed_at: Optional[str] = None
     connection_name: str
+    status: Optional[str] = None
 
 
 class ConnectionHealth(BaseModel):
     """Connection health status."""
     id: str
     name: str
-    status: str  # connected, error, connecting
+    status: str  # connected, error, idle, inactive, unknown
     last_checked: str
+    error: Optional[str] = None
+
+
+class QueryTrend(BaseModel):
+    """Query trend data point."""
+    date: str
+    queries: int
+
+
+class TopQuery(BaseModel):
+    """Top executed query."""
+    sql_hash: str
+    sql: str
+    execution_count: int
+    avg_duration_ms: float
 
 
 class DashboardData(BaseModel):
@@ -44,87 +63,61 @@ class DashboardData(BaseModel):
     connection_health: list[ConnectionHealth]
 
 
+class DashboardDataExtended(DashboardData):
+    """Extended dashboard data with trends."""
+    query_trends: list[QueryTrend]
+    top_queries: list[TopQuery]
+
+
 @router.get("/stats", response_model=DashboardStats)
 async def get_dashboard_stats(
     tenant_id: str = Depends(get_tenant_id),
+    db: AsyncSession = Depends(get_db),
 ):
     """Get dashboard statistics for the current tenant."""
-    # TODO: Implement actual database queries
-    # For now, return mock data
-    return DashboardStats(
-        total_connections=5,
-        active_connections=3,
-        queries_today=42,
-        queries_this_week=287,
-        ai_tokens_used=15420,
-        avg_response_time_ms=145.3,
-    )
+    service = DashboardService(db, tenant_id)
+    stats = await service.get_stats()
+
+    return DashboardStats(**stats)
 
 
 @router.get("", response_model=DashboardData)
 async def get_dashboard_data(
     tenant_id: str = Depends(get_tenant_id),
+    db: AsyncSession = Depends(get_db),
 ):
     """Get complete dashboard data including stats, recent queries, and connection health."""
-    stats = DashboardStats(
-        total_connections=5,
-        active_connections=3,
-        queries_today=42,
-        queries_this_week=287,
-        ai_tokens_used=15420,
-        avg_response_time_ms=145.3,
-    )
+    service = DashboardService(db, tenant_id)
 
-    recent_queries = [
-        RecentQuery(
-            id="q1",
-            name="Get Active Customers",
-            sql="SELECT * FROM Customers WHERE IsActive = 1",
-            execution_time_ms=45,
-            executed_at=(datetime.utcnow() - timedelta(minutes=5)).isoformat(),
-            connection_name="Production SQL Server",
-        ),
-        RecentQuery(
-            id="q2",
-            name="Monthly Revenue",
-            sql="SELECT SUM(Amount) FROM Orders WHERE OrderDate >= '2024-01-01'",
-            execution_time_ms=230,
-            executed_at=(datetime.utcnow() - timedelta(minutes=15)).isoformat(),
-            connection_name="Analytics PostgreSQL",
-        ),
-        RecentQuery(
-            id="q3",
-            name="User Sessions",
-            sql="SELECT COUNT(*) FROM Sessions WHERE CreatedAt > NOW() - INTERVAL '24 hours'",
-            execution_time_ms=12,
-            executed_at=(datetime.utcnow() - timedelta(hours=1)).isoformat(),
-            connection_name="Development Database",
-        ),
-    ]
-
-    connection_health = [
-        ConnectionHealth(
-            id="c1",
-            name="Production SQL Server",
-            status="connected",
-            last_checked=datetime.utcnow().isoformat(),
-        ),
-        ConnectionHealth(
-            id="c2",
-            name="Analytics PostgreSQL",
-            status="connected",
-            last_checked=datetime.utcnow().isoformat(),
-        ),
-        ConnectionHealth(
-            id="c3",
-            name="Development Database",
-            status="error",
-            last_checked=(datetime.utcnow() - timedelta(minutes=2)).isoformat(),
-        ),
-    ]
+    stats_data = await service.get_stats()
+    recent_queries_data = await service.get_recent_queries(limit=10)
+    connection_health_data = await service.get_connection_health()
 
     return DashboardData(
-        stats=stats,
-        recent_queries=recent_queries,
-        connection_health=connection_health,
+        stats=DashboardStats(**stats_data),
+        recent_queries=[RecentQuery(**q) for q in recent_queries_data],
+        connection_health=[ConnectionHealth(**c) for c in connection_health_data],
+    )
+
+
+@router.get("/extended", response_model=DashboardDataExtended)
+async def get_dashboard_data_extended(
+    tenant_id: str = Depends(get_tenant_id),
+    db: AsyncSession = Depends(get_db),
+):
+    """Get extended dashboard data including trends and top queries."""
+    service = DashboardService(db, tenant_id)
+
+    stats_data = await service.get_stats()
+    recent_queries_data = await service.get_recent_queries(limit=10)
+    connection_health_data = await service.get_connection_health()
+    query_trends_data = await service.get_query_trends(days=7)
+    top_queries_data = await service.get_top_queries(limit=5)
+
+    return DashboardDataExtended(
+        stats=DashboardStats(**stats_data),
+        recent_queries=[RecentQuery(**q) for q in recent_queries_data],
+        connection_health=[ConnectionHealth(**c) for c in connection_health_data],
+        query_trends=[QueryTrend(**t) for t in query_trends_data],
+        top_queries=[TopQuery(**q) for q in top_queries_data],
     )
