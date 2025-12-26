@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <Extern href="stdidcmd.h"/>
+  <Extern href="vsshlids.h"/>
+
+  <Commands package="guidSQL2AIPackage">
+
+    <Menus>
+      <!-- Main SQL2.AI menu under Tools -->
+      <Menu guid="guidSQL2AIPackageCmdSet" id="SQL2AIMenu" priority="0x0100" type="Menu">
+        <Parent guid="guidSHLMainMenu" id="IDG_VS_TOOLS_EXT_TOOLS"/>
+        <Strings>
+          <ButtonText>SQL2.AI</ButtonText>
+        </Strings>
+      </Menu>
+
+      <!-- Context menu for query editor -->
+      <Menu guid="guidSQL2AIPackageCmdSet" id="SQL2AIContextMenu" priority="0x0100" type="Context">
+        <Strings>
+          <ButtonText>SQL2.AI</ButtonText>
+        </Strings>
+      </Menu>
+    </Menus>
+
+    <Groups>
+      <!-- Group for main menu commands -->
+      <Group guid="guidSQL2AIPackageCmdSet" id="SQL2AIMenuGroup" priority="0x0100">
+        <Parent guid="guidSQL2AIPackageCmdSet" id="SQL2AIMenu"/>
+      </Group>
+
+      <!-- Group for generation commands -->
+      <Group guid="guidSQL2AIPackageCmdSet" id="SQL2AIGenerateGroup" priority="0x0200">
+        <Parent guid="guidSQL2AIPackageCmdSet" id="SQL2AIMenu"/>
+      </Group>
+
+      <!-- Group for settings -->
+      <Group guid="guidSQL2AIPackageCmdSet" id="SQL2AISettingsGroup" priority="0x0300">
+        <Parent guid="guidSQL2AIPackageCmdSet" id="SQL2AIMenu"/>
+      </Group>
+
+      <!-- Context menu group -->
+      <Group guid="guidSQL2AIPackageCmdSet" id="SQL2AIContextGroup" priority="0x0100">
+        <Parent guid="guidSQL2AIPackageCmdSet" id="SQL2AIContextMenu"/>
+      </Group>
+    </Groups>
+
+    <Buttons>
+      <!-- Optimize Query -->
+      <Button guid="guidSQL2AIPackageCmdSet" id="OptimizeQueryCommandId" priority="0x0100" type="Button">
+        <Parent guid="guidSQL2AIPackageCmdSet" id="SQL2AIMenuGroup"/>
+        <Icon guid="guidImages" id="bmpOptimize"/>
+        <Strings>
+          <ButtonText>Optimize Query</ButtonText>
+          <ToolTipText>Analyze and optimize the selected SQL query</ToolTipText>
+        </Strings>
+      </Button>
+
+      <!-- Review Code -->
+      <Button guid="guidSQL2AIPackageCmdSet" id="ReviewCodeCommandId" priority="0x0110" type="Button">
+        <Parent guid="guidSQL2AIPackageCmdSet" id="SQL2AIMenuGroup"/>
+        <Icon guid="guidImages" id="bmpReview"/>
+        <Strings>
+          <ButtonText>Review Code</ButtonText>
+          <ToolTipText>Review SQL code for security and performance issues</ToolTipText>
+        </Strings>
+      </Button>
+
+      <!-- Explain Query -->
+      <Button guid="guidSQL2AIPackageCmdSet" id="ExplainQueryCommandId" priority="0x0120" type="Button">
+        <Parent guid="guidSQL2AIPackageCmdSet" id="SQL2AIMenuGroup"/>
+        <Icon guid="guidImages" id="bmpExplain"/>
+        <Strings>
+          <ButtonText>Explain Query</ButtonText>
+          <ToolTipText>Get a natural language explanation of the query</ToolTipText>
+        </Strings>
+      </Button>
+
+      <!-- Analyze Execution Plan -->
+      <Button guid="guidSQL2AIPackageCmdSet" id="AnalyzeExecutionPlanCommandId" priority="0x0130" type="Button">
+        <Parent guid="guidSQL2AIPackageCmdSet" id="SQL2AIMenuGroup"/>
+        <Icon guid="guidImages" id="bmpPlan"/>
+        <Strings>
+          <ButtonText>Analyze Execution Plan</ButtonText>
+          <ToolTipText>Get AI analysis of execution plan XML</ToolTipText>
+        </Strings>
+      </Button>
+
+      <!-- Generate CRUD -->
+      <Button guid="guidSQL2AIPackageCmdSet" id="GenerateCrudCommandId" priority="0x0200" type="Button">
+        <Parent guid="guidSQL2AIPackageCmdSet" id="SQL2AIGenerateGroup"/>
+        <Icon guid="guidImages" id="bmpGenerate"/>
+        <Strings>
+          <ButtonText>Generate CRUD Procedures</ButtonText>
+          <ToolTipText>Generate Create, Read, Update, Delete procedures for a table</ToolTipText>
+        </Strings>
+      </Button>
+
+      <!-- Generate from Prompt -->
+      <Button guid="guidSQL2AIPackageCmdSet" id="GenerateFromPromptCommandId" priority="0x0210" type="Button">
+        <Parent guid="guidSQL2AIPackageCmdSet" id="SQL2AIGenerateGroup"/>
+        <Icon guid="guidImages" id="bmpAI"/>
+        <Strings>
+          <ButtonText>Generate from Prompt...</ButtonText>
+          <ToolTipText>Generate SQL from natural language description</ToolTipText>
+        </Strings>
+      </Button>
+
+      <!-- Settings -->
+      <Button guid="guidSQL2AIPackageCmdSet" id="SettingsCommandId" priority="0x0300" type="Button">
+        <Parent guid="guidSQL2AIPackageCmdSet" id="SQL2AISettingsGroup"/>
+        <Icon guid="guidImages" id="bmpSettings"/>
+        <Strings>
+          <ButtonText>Settings...</ButtonText>
+          <ToolTipText>Configure SQL2.AI settings</ToolTipText>
+        </Strings>
+      </Button>
+
+      <!-- Context menu buttons -->
+      <Button guid="guidSQL2AIPackageCmdSet" id="OptimizeQueryCommandId" priority="0x0100" type="Button">
+        <Parent guid="guidSQL2AIPackageCmdSet" id="SQL2AIContextGroup"/>
+        <Strings>
+          <ButtonText>SQL2.AI: Optimize</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="guidSQL2AIPackageCmdSet" id="ReviewCodeCommandId" priority="0x0110" type="Button">
+        <Parent guid="guidSQL2AIPackageCmdSet" id="SQL2AIContextGroup"/>
+        <Strings>
+          <ButtonText>SQL2.AI: Review</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="guidSQL2AIPackageCmdSet" id="ExplainQueryCommandId" priority="0x0120" type="Button">
+        <Parent guid="guidSQL2AIPackageCmdSet" id="SQL2AIContextGroup"/>
+        <Strings>
+          <ButtonText>SQL2.AI: Explain</ButtonText>
+        </Strings>
+      </Button>
+    </Buttons>
+
+    <Bitmaps>
+      <Bitmap guid="guidImages" href="Resources\Commands.png" usedList="bmpOptimize, bmpReview, bmpExplain, bmpPlan, bmpGenerate, bmpAI, bmpSettings"/>
+    </Bitmaps>
+  </Commands>
+
+  <KeyBindings>
+    <KeyBinding guid="guidSQL2AIPackageCmdSet" id="OptimizeQueryCommandId" editor="guidVSStd97" key1="O" mod1="Control Alt"/>
+    <KeyBinding guid="guidSQL2AIPackageCmdSet" id="ReviewCodeCommandId" editor="guidVSStd97" key1="R" mod1="Control Alt"/>
+    <KeyBinding guid="guidSQL2AIPackageCmdSet" id="ExplainQueryCommandId" editor="guidVSStd97" key1="E" mod1="Control Alt"/>
+    <KeyBinding guid="guidSQL2AIPackageCmdSet" id="GenerateFromPromptCommandId" editor="guidVSStd97" key1="G" mod1="Control Alt"/>
+  </KeyBindings>
+
+  <Symbols>
+    <GuidSymbol name="guidSQL2AIPackage" value="{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}" />
+
+    <GuidSymbol name="guidSQL2AIPackageCmdSet" value="{B2C3D4E5-F6A7-8901-BCDE-F12345678901}">
+      <!-- Menus -->
+      <IDSymbol name="SQL2AIMenu" value="0x1000"/>
+      <IDSymbol name="SQL2AIContextMenu" value="0x1001"/>
+
+      <!-- Groups -->
+      <IDSymbol name="SQL2AIMenuGroup" value="0x1100"/>
+      <IDSymbol name="SQL2AIGenerateGroup" value="0x1101"/>
+      <IDSymbol name="SQL2AISettingsGroup" value="0x1102"/>
+      <IDSymbol name="SQL2AIContextGroup" value="0x1103"/>
+
+      <!-- Commands -->
+      <IDSymbol name="OptimizeQueryCommandId" value="0x0100"/>
+      <IDSymbol name="ReviewCodeCommandId" value="0x0101"/>
+      <IDSymbol name="ExplainQueryCommandId" value="0x0102"/>
+      <IDSymbol name="GenerateCrudCommandId" value="0x0103"/>
+      <IDSymbol name="GenerateFromPromptCommandId" value="0x0104"/>
+      <IDSymbol name="AnalyzeExecutionPlanCommandId" value="0x0105"/>
+      <IDSymbol name="SettingsCommandId" value="0x0106"/>
+    </GuidSymbol>
+
+    <GuidSymbol name="guidImages" value="{C3D4E5F6-A7B8-9012-CDEF-123456789012}">
+      <IDSymbol name="bmpOptimize" value="1"/>
+      <IDSymbol name="bmpReview" value="2"/>
+      <IDSymbol name="bmpExplain" value="3"/>
+      <IDSymbol name="bmpPlan" value="4"/>
+      <IDSymbol name="bmpGenerate" value="5"/>
+      <IDSymbol name="bmpAI" value="6"/>
+      <IDSymbol name="bmpSettings" value="7"/>
+    </GuidSymbol>
+  </Symbols>
+
+</CommandTable>

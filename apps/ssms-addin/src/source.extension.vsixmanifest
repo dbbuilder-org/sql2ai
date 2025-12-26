@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
+  <Metadata>
+    <Identity Id="SQL2AI.SSMS.A1B2C3D4-E5F6-7890-ABCD-EF1234567890" Version="1.0.0" Language="en-US" Publisher="SQL2.AI" />
+    <DisplayName>SQL2.AI for SSMS</DisplayName>
+    <Description xml:space="preserve">AI-powered SQL Server Management Studio extension. Features include:
+• AI Query Assist - Inline completions in query editor
+• Explain Query - Natural language query explanations
+• Optimize Query - AI-powered query optimization suggestions
+• Generate CRUD - Auto-generate stored procedures
+• Code Review - Security and performance analysis
+• Execution Plan Analysis - AI explanation of query plans</Description>
+    <MoreInfo>https://sql2.ai</MoreInfo>
+    <License>LICENSE.txt</License>
+    <Icon>Resources\Icon.png</Icon>
+    <PreviewImage>Resources\Preview.png</PreviewImage>
+    <Tags>SQL, AI, SSMS, Query Optimization, Code Review, Database</Tags>
+  </Metadata>
+  <Installation>
+    <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[17.0,18.0)" />
+    <InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="[17.0,18.0)" />
+    <InstallationTarget Id="Microsoft.VisualStudio.Enterprise" Version="[17.0,18.0)" />
+  </Installation>
+  <Dependencies>
+    <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.8,)" />
+  </Dependencies>
+  <Assets>
+    <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%|" />
+    <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
+  </Assets>
+</PackageManifest>

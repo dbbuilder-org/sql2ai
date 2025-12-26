@@ -1,0 +1,212 @@
+# SQL2.AI Local Development Stack
+# Usage: docker compose up -d
+
+name: sql2ai
+
+services:
+  # ===========================================
+  # Core Infrastructure
+  # ===========================================
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: sql2ai-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: sql2ai
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-scripts/postgres:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: sql2ai-redis
+    command: redis-server --appendonly yes
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # ===========================================
+  # SQL2.AI Services
+  # ===========================================
+
+  api:
+    build:
+      context: ../../apps/api
+      dockerfile: Dockerfile
+    container_name: sql2ai-api
+    environment:
+      SQL2AI_environment: development
+      SQL2AI_DEBUG: "true"
+      SQL2AI_DATABASE_URL: postgresql+asyncpg://postgres:postgres@postgres:5432/sql2ai
+      SQL2AI_redis_url: redis://redis:6379/0
+      # Add your API keys in .env file
+      SQL2AI_openai_api_key: ${OPENAI_API_KEY:-}
+      SQL2AI_ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      SQL2AI_sentry_dsn: ${SENTRY_DSN:-}
+      SQL2AI_posthog_api_key: ${POSTHOG_API_KEY:-}
+      SQL2AI_clerk_secret_key: ${CLERK_SECRET_KEY:-}
+      SQL2AI_stripe_secret_key: ${STRIPE_SECRET_KEY:-}
+      SQL2AI_resend_api_key: ${RESEND_API_KEY:-}
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../../apps/api/src:/app/src:ro
+      - ../../libs/shared:/app/libs/shared:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # ===========================================
+  # Development Tools
+  # ===========================================
+
+  # PostgreSQL Admin UI
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: sql2ai-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@sql2.ai
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      - postgres
+    profiles:
+      - tools
+
+  # Redis Admin UI
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: sql2ai-redis-commander
+    environment:
+      REDIS_HOSTS: local:redis:6379
+    ports:
+      - "8081:8081"
+    depends_on:
+      - redis
+    profiles:
+      - tools
+
+  # ===========================================
+  # Observability (Optional)
+  # ===========================================
+
+  # Jaeger for distributed tracing
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: sql2ai-jaeger
+    environment:
+      COLLECTOR_OTLP_ENABLED: "true"
+    ports:
+      - "16686:16686"  # Jaeger UI
+      - "4317:4317"    # OTLP gRPC
+      - "4318:4318"    # OTLP HTTP
+    profiles:
+      - observability
+
+  # Prometheus for metrics
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: sql2ai-prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    profiles:
+      - observability
+
+  # Grafana for dashboards
+  grafana:
+    image: grafana/grafana:latest
+    container_name: sql2ai-grafana
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_USERS_ALLOW_SIGN_UP: "false"
+    ports:
+      - "3001:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./config/grafana/provisioning:/etc/grafana/provisioning:ro
+    depends_on:
+      - prometheus
+    profiles:
+      - observability
+
+  # ===========================================
+  # Test Databases (for integration testing)
+  # ===========================================
+
+  # SQL Server for testing
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sql2ai-sqlserver
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "Sql2AI_Dev123!"
+      MSSQL_PID: Developer
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+    healthcheck:
+      test: ["CMD", "/opt/mssql-tools/bin/sqlcmd", "-S", "localhost", "-U", "sa", "-P", "Sql2AI_Dev123!", "-Q", "SELECT 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    profiles:
+      - testing
+
+  # Additional PostgreSQL for testing
+  postgres-test:
+    image: postgres:16-alpine
+    container_name: sql2ai-postgres-test
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: testdb
+    ports:
+      - "5433:5432"
+    profiles:
+      - testing
+
+volumes:
+  postgres_data:
+  redis_data:
+  pgadmin_data:
+  prometheus_data:
+  grafana_data:
+  sqlserver_data:
+
+networks:
+  default:
+    name: sql2ai-network
