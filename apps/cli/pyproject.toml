@@ -1,0 +1,75 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "sql2ai"
+version = "0.1.0"
+description = "SQL2.AI CLI - AI-powered database development from the command line"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+authors = [
+    { name = "Chris Therriault", email = "chris@servicevision.net" }
+]
+keywords = [
+    "sql",
+    "database",
+    "ai",
+    "postgresql",
+    "sqlserver",
+    "cli"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Database",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+dependencies = [
+    "typer[all]>=0.9.0",
+    "rich>=13.0.0",
+    "httpx>=0.26.0",
+    "pydantic>=2.5.0",
+    "pydantic-settings>=2.1.0",
+    "keyring>=24.0.0",
+    "python-dotenv>=1.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.23.0",
+    "black>=24.0.0",
+    "ruff>=0.1.0",
+]
+
+[project.scripts]
+sql2ai = "sql2ai_cli.main:app"
+
+[project.urls]
+Homepage = "https://sql2.ai"
+Documentation = "https://sql2.ai/docs/cli"
+Repository = "https://github.com/dbbuilder-org/sql2ai"
+Issues = "https://github.com/dbbuilder-org/sql2ai/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/sql2ai_cli"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W"]
+
+[tool.black]
+line-length = 100
+target-version = ["py310"]
