@@ -86,30 +86,6 @@ databases:
     postgresMajorVersion: "15"
 
 # ===========================================
-# Static Sites
+# Note: Static site (sql2ai-site) is deployed separately
+# via Render dashboard - already live at sql2.ai
 # ===========================================
-staticSites:
-  - name: sql2ai-site
-    buildCommand: npm install && bash apps/site/scripts/build.sh
-    branch: main
-    staticPublishPath: dist/apps/site/.next
-    envVars:
-      - key: NODE_ENV
-        value: production
-      - key: NODE_OPTIONS
-        value: --max-old-space-size=1536
-    buildFilter:
-      paths:
-        - apps/site/**
-        - libs/**
-        - package.json
-        - nx.json
-    headers:
-      - path: /*
-        name: X-Frame-Options
-        value: DENY
-    routes:
-      - type: rewrite
-        source: /*
-        destination: /index.html
-    # Custom domains: sql2.ai, www.sql2.ai
