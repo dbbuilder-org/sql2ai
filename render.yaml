@@ -19,7 +19,9 @@ services:
       - key: SQL2AI_DEBUG
         value: "false"
       - key: SQL2AI_DATABASE_URL
-        sync: false  # Set manually after creating database
+        fromDatabase:
+          name: sql2ai-db
+          property: connectionString
       - key: SQL2AI_SECRET_KEY
         generateValue: true
       - key: SQL2AI_CLERK_SECRET_KEY
@@ -75,12 +77,13 @@ services:
     # Custom domain: app.sql2.ai
 
 # ===========================================
-# Database: Create manually in Render dashboard
-# - Go to: Dashboard > New > PostgreSQL
-# - Name: sql2ai-db
-# - Plan: Basic 256MB (or your choice)
-# - Then set SQL2AI_DATABASE_URL env var on sql2ai-api
+# PostgreSQL Database
 # ===========================================
+databases:
+  - name: sql2ai-db
+    plan: basic-256mb
+    region: oregon
+    ipAllowList: []  # Allow all connections
 
 # ===========================================
 # Note: Static site (sql2ai-site) is deployed separately
