@@ -2,7 +2,55 @@
 # https://render.com/docs/blueprint-spec
 
 services:
+  # ===========================================
+  # API Backend (FastAPI)
+  # ===========================================
+  - type: web
+    name: sql2ai-api
+    runtime: docker
+    dockerfilePath: ./apps/api/Dockerfile
+    dockerContext: .
+    branch: main
+    healthCheckPath: /health
+    envVars:
+      - key: SQL2AI_ENVIRONMENT
+        value: production
+      - key: SQL2AI_DEBUG
+        value: "false"
+      - key: SQL2AI_DATABASE_URL
+        fromDatabase:
+          name: sql2ai-db
+          property: connectionString
+      - key: SQL2AI_REDIS_URL
+        fromService:
+          name: sql2ai-redis
+          type: redis
+          property: connectionString
+      - key: SQL2AI_SECRET_KEY
+        generateValue: true
+      - key: SQL2AI_CLERK_SECRET_KEY
+        sync: false
+      - key: SQL2AI_CLERK_PUBLISHABLE_KEY
+        sync: false
+      - key: SQL2AI_STRIPE_SECRET_KEY
+        sync: false
+      - key: SQL2AI_STRIPE_WEBHOOK_SECRET
+        sync: false
+      - key: SQL2AI_OPENAI_API_KEY
+        sync: false
+      - key: SQL2AI_ANTHROPIC_API_KEY
+        sync: false
+      - key: SQL2AI_SENTRY_DSN
+        sync: false
+    buildFilter:
+      paths:
+        - apps/api/**
+        - libs/shared/**
+    # Custom domain: api.sql2.ai
+
+  # ===========================================
   # Marketing Site (Next.js Static Export)
+  # ===========================================
   - type: static_site
     name: sql2ai-site
     buildCommand: npm install && bash apps/site/scripts/build.sh
@@ -27,6 +75,18 @@ services:
       - type: rewrite
         source: /*
         destination: /index.html
-    # Custom domains configured in Render dashboard:
-    # - sql2.ai
-    # - www.sql2.ai
+    # Custom domains: sql2.ai, www.sql2.ai
+
+# ===========================================
+# Databases
+# ===========================================
+databases:
+  - name: sql2ai-db
+    databaseName: sql2ai
+    plan: starter
+    postgresMajorVersion: "15"
+
+# ===========================================
+# Redis
+# ===========================================
+# Note: Redis is a paid add-on, configure in dashboard if needed

@@ -12,24 +12,45 @@ WORKDIR /build
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     curl \
+    libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Install uv for fast package management
 RUN pip install uv
 
-# Copy dependency files
-COPY pyproject.toml ./
-COPY ../../libs/shared /libs/shared
-
-# Create virtual environment and install dependencies
+# Create virtual environment
 RUN uv venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
-# Install the shared library first
+# Copy and install shared library first
+COPY libs/shared /libs/shared
 RUN cd /libs/shared && uv pip install .
 
-# Install API dependencies
-RUN uv pip install .
+# Copy and install API dependencies
+COPY apps/api/pyproject.toml /build/
+WORKDIR /build
+RUN uv pip install --no-deps .
+
+# Install remaining dependencies
+RUN uv pip install \
+    fastapi>=0.109.0 \
+    uvicorn[standard]>=0.27.0 \
+    python-multipart>=0.0.6 \
+    pydantic>=2.5.0 \
+    pydantic-settings>=2.1.0 \
+    email-validator>=2.1.0 \
+    asyncpg>=0.29.0 \
+    sqlalchemy[asyncio]>=2.0.0 \
+    alembic>=1.13.0 \
+    stripe>=7.0.0 \
+    python-jose[cryptography]>=3.3.0 \
+    passlib[bcrypt]>=1.7.4 \
+    structlog>=24.1.0 \
+    redis>=5.0.0 \
+    httpx>=0.26.0 \
+    ulid-py>=1.1.0 \
+    psycopg2-binary>=2.9.0 \
+    cryptography>=42.0.0
 
 # ===========================================
 # Runtime Stage
@@ -41,8 +62,7 @@ WORKDIR /app
 # Install runtime dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
-    # ODBC for SQL Server
-    unixodbc \
+    libpq5 \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy virtual environment from builder
@@ -50,7 +70,7 @@ COPY --from=builder /opt/venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
 # Copy application code
-COPY src/ ./src/
+COPY apps/api/src/ ./src/
 
 # Create non-root user
 RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
@@ -69,4 +89,4 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD curl -f http://localhost:8000/health || exit 1
 
 # Run the application
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "sql2ai_api.main:app", "--host", "0.0.0.0", "--port", "8000"]
