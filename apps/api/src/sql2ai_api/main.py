@@ -12,7 +12,7 @@ from sql2ai_api.config import settings
 from sql2ai_api.routers import (
     schemas, queries, migrations, telemetry, connections,
     orchestrator, migrator, optimize, compliance,
-    writer, codereview, version, dashboard
+    writer, codereview, version, dashboard, billing
 )
 from sql2ai_api.routers.webhooks import clerk_router
 from sql2ai_api.middleware.auth import create_auth_middleware
@@ -156,6 +156,8 @@ auth_middleware = create_auth_middleware(
         "/api/redoc",
         "/api/openapi.json",
         "/api/webhooks/clerk",  # Webhooks have their own signature verification
+        "/api/billing/webhook",  # Stripe webhook has signature verification
+        "/api/billing/pricing",  # Public pricing info
     ]
 )
 app.middleware("http")(auth_middleware)
@@ -210,6 +212,7 @@ app.include_router(writer.router, prefix="/api/writer", tags=["writer"])
 app.include_router(codereview.router, prefix="/api/codereview", tags=["codereview"])
 app.include_router(version.router, prefix="/api/version", tags=["version"])
 app.include_router(dashboard.router, prefix="/api/dashboard", tags=["dashboard"])
+app.include_router(billing.router, prefix="/api/billing", tags=["billing"])
 app.include_router(clerk_router, prefix="/api/webhooks", tags=["webhooks"])
 
 
