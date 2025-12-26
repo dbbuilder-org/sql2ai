@@ -12,7 +12,7 @@ from sql2ai_api.config import settings
 from sql2ai_api.routers import (
     schemas, queries, migrations, telemetry, connections,
     orchestrator, migrator, optimize, compliance,
-    writer, codereview, version
+    writer, codereview, version, dashboard
 )
 from sql2ai_api.routers.webhooks import clerk_router
 from sql2ai_api.middleware.auth import create_auth_middleware
@@ -209,6 +209,7 @@ app.include_router(compliance.router, prefix="/api/compliance", tags=["complianc
 app.include_router(writer.router, prefix="/api/writer", tags=["writer"])
 app.include_router(codereview.router, prefix="/api/codereview", tags=["codereview"])
 app.include_router(version.router, prefix="/api/version", tags=["version"])
+app.include_router(dashboard.router, prefix="/api/dashboard", tags=["dashboard"])
 app.include_router(clerk_router, prefix="/api/webhooks", tags=["webhooks"])
 
 

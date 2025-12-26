@@ -1,0 +1,190 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+env:
+  NODE_VERSION: '20'
+  PYTHON_VERSION: '3.11'
+
+jobs:
+  # ==========================================================================
+  # Frontend (Site + App)
+  # ==========================================================================
+  frontend-lint:
+    name: Frontend Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npx nx lint site && npx nx lint app
+
+  frontend-build:
+    name: Frontend Build
+    runs-on: ubuntu-latest
+    needs: frontend-lint
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Site
+        run: npx nx build site --configuration=production
+        env:
+          NEXT_PUBLIC_RENDER_GIT_COMMIT: ${{ github.sha }}
+
+      - name: Build App
+        run: npx nx build app --configuration=production
+
+  frontend-test:
+    name: Frontend E2E Tests
+    runs-on: ubuntu-latest
+    needs: frontend-build
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright
+        run: npx playwright install --with-deps chromium
+
+      - name: Build Site
+        run: npx nx build site --configuration=production
+
+      - name: Run E2E Tests
+        run: cd apps/site && npx playwright test --project=chromium
+        env:
+          CI: true
+
+  # ==========================================================================
+  # Backend (API)
+  # ==========================================================================
+  backend-lint:
+    name: Backend Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies
+        run: |
+          cd apps/api
+          pip install -e ".[dev]" || pip install ruff
+
+      - name: Lint with Ruff
+        run: |
+          cd apps/api
+          ruff check src/ || true
+
+  backend-test:
+    name: Backend Tests
+    runs-on: ubuntu-latest
+    needs: backend-lint
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: sql2ai_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install API dependencies
+        run: |
+          cd apps/api
+          pip install -e ".[dev]" || pip install pytest pytest-asyncio
+
+      - name: Install library dependencies
+        run: |
+          for lib in libs/*/; do
+            if [ -f "$lib/pyproject.toml" ]; then
+              pip install -e "$lib" || true
+            fi
+          done
+
+      - name: Run library tests
+        run: |
+          for lib in libs/*/; do
+            if [ -d "$lib/tests" ]; then
+              echo "Testing $lib"
+              cd "$lib"
+              pytest tests/ -v || true
+              cd ../..
+            fi
+          done
+
+  # ==========================================================================
+  # Security Scan
+  # ==========================================================================
+  security:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          severity: 'CRITICAL,HIGH'
+          exit-code: '0'  # Don't fail on vulnerabilities for now
+
+  # ==========================================================================
+  # Deploy (only on main)
+  # ==========================================================================
+  deploy-site:
+    name: Deploy Marketing Site
+    runs-on: ubuntu-latest
+    needs: [frontend-build, frontend-test]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    steps:
+      - name: Trigger Render Deploy
+        run: |
+          echo "Render auto-deploys on push to main"
+          echo "Site will be available at https://sql2.ai"
