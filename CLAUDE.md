@@ -21,7 +21,8 @@
 
 ### Build Commands
 - API: Docker build from `apps/api/Dockerfile`
-- App: `npm ci && ./node_modules/.bin/nx build @sql2ai/app --configuration=production`
+- App: `npm ci --include=dev && ./node_modules/.bin/nx build @sql2ai/app --configuration=production`
+  - **Important:** `--include=dev` is required because NX is in devDependencies and Render sets NODE_ENV=production
 
 ### Known Issues
 - NX project names are scoped: use `@sql2ai/app` not `app`
