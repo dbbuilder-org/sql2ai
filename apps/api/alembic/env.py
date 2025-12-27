@@ -38,10 +38,14 @@ if config.config_file_name is not None:
 target_metadata = Base.metadata
 
 # Override sqlalchemy.url from settings
-config.set_main_option(
-    "sqlalchemy.url",
-    settings.DATABASE_URL.replace("+asyncpg", ""),
-)
+# Keep +asyncpg for async migrations
+db_url = settings.DATABASE_URL
+# Ensure asyncpg driver is specified for async engine
+if "postgresql://" in db_url and "+asyncpg" not in db_url:
+    db_url = db_url.replace("postgresql://", "postgresql+asyncpg://")
+elif "postgres://" in db_url:
+    db_url = db_url.replace("postgres://", "postgresql+asyncpg://")
+config.set_main_option("sqlalchemy.url", db_url)
 
 
 def run_migrations_offline() -> None:
