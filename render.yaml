@@ -52,8 +52,8 @@ services:
   - type: web
     name: sql2ai-app
     runtime: node
-    buildCommand: npm ci && ./node_modules/.bin/nx build app --configuration=production
-    startCommand: ./node_modules/.bin/nx start app
+    buildCommand: npm ci && ./node_modules/.bin/nx build @sql2ai/app --configuration=production
+    startCommand: ./node_modules/.bin/nx start @sql2ai/app
     branch: main
     plan: starter
     healthCheckPath: /
