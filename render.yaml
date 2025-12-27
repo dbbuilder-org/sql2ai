@@ -39,7 +39,7 @@ services:
       - key: SQL2AI_SENTRY_DSN
         sync: false
       - key: SQL2AI_CORS_ORIGINS
-        value: "https://app.sql2.ai,https://sql2.ai,http://localhost:3000"
+        value: '["https://app.sql2.ai","https://sql2.ai","http://localhost:3000"]'
     buildFilter:
       paths:
         - apps/api/**
