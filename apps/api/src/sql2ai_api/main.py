@@ -157,8 +157,8 @@ app.middleware("http")(auth_middleware)
 @app.middleware("http")
 async def add_request_id(request: Request, call_next):
     """Add request ID to all requests for tracing."""
-    from ulid import ULID
-    request_id = str(ULID())
+    import uuid
+    request_id = str(uuid.uuid4())
     request.state.request_id = request_id
 
     response = await call_next(request)
