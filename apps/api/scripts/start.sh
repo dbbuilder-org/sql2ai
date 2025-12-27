@@ -3,6 +3,13 @@ set -e
 
 echo "=== SQL2.AI API Startup ==="
 
+# Transform DATABASE_URL for asyncpg compatibility
+# Render provides postgres:// but asyncpg needs postgresql+asyncpg://
+if [ -n "$SQL2AI_DATABASE_URL" ]; then
+    export SQL2AI_DATABASE_URL=$(echo "$SQL2AI_DATABASE_URL" | sed 's|^postgres://|postgresql+asyncpg://|' | sed 's|^postgresql://|postgresql+asyncpg://|')
+    echo "Database URL configured for asyncpg"
+fi
+
 # Run database migrations
 echo "Running database migrations..."
 cd /app
