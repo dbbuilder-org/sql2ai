@@ -101,8 +101,8 @@ class AuditLog(BaseModel, TenantMixin):
     # Compliance tagging
     compliance_frameworks: Mapped[list] = mapped_column(JSONB, default=list)
 
-    # Metadata
-    metadata: Mapped[dict] = mapped_column(JSONB, default=dict)
+    # Extra data (renamed from metadata - reserved by SQLAlchemy)
+    extra_data: Mapped[dict] = mapped_column(JSONB, default=dict)
 
     def __repr__(self) -> str:
         return f"<AuditLog {self.action.value} on {self.resource_type}>"
@@ -147,7 +147,7 @@ class AuditLog(BaseModel, TenantMixin):
         request_id: Optional[str] = None,
         previous_hash: Optional[str] = None,
         compliance_frameworks: Optional[list] = None,
-        metadata: Optional[dict] = None,
+        extra_data: Optional[dict] = None,
     ) -> "AuditLog":
         """Create a new audit log entry with computed hash."""
         entry = cls(
@@ -165,7 +165,7 @@ class AuditLog(BaseModel, TenantMixin):
             request_id=request_id,
             previous_hash=previous_hash,
             compliance_frameworks=compliance_frameworks or [],
-            metadata=metadata or {},
+            extra_data=extra_data or {},
         )
 
         # Compute and set the entry hash
