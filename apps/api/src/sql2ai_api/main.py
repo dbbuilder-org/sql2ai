@@ -148,19 +148,8 @@ app.add_middleware(
 )
 
 # Configure Clerk authentication middleware
-auth_middleware = create_auth_middleware(
-    excluded_paths=[
-        "/",
-        "/health",
-        "/ready",
-        "/api/docs",
-        "/api/redoc",
-        "/api/openapi.json",
-        "/api/webhooks/clerk",  # Webhooks have their own signature verification
-        "/api/billing/webhook",  # Stripe webhook has signature verification
-        "/api/billing/pricing",  # Public pricing info
-    ]
-)
+# Note: Excluded paths are configured in the middleware itself
+auth_middleware = create_auth_middleware()
 app.middleware("http")(auth_middleware)
 
 
