@@ -27,7 +27,7 @@ COPY libs/shared /libs/shared
 RUN cd /libs/shared && uv pip install .
 
 # Copy and install API dependencies
-COPY apps/api/pyproject.toml /build/
+COPY apps/api/pyproject.toml apps/api/README.md /build/
 WORKDIR /build
 RUN uv pip install --no-deps .
 
