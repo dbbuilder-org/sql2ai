@@ -19,8 +19,8 @@ dependencies = [
     "uvicorn[standard]>=0.27.0",
     "python-multipart>=0.0.6",
 
-    # Shared library
-    "sql2ai-shared @ file:///${PROJECT_ROOT}/../../../libs/shared",
+    # Shared library (installed separately in Docker)
+    # "sql2ai-shared",
 
     # Validation
     "pydantic>=2.5.0",
