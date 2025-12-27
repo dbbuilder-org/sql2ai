@@ -1,16 +1,36 @@
 """API endpoints for SQL Orchestrator."""
 
 import sys
+import os
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel, Field
 
-# Add orchestrator library to path
-sys.path.insert(0, "/Users/admin/dev2/sql2ai/libs/sql-orchestrator/src")
+# Try to import orchestrator library (may not be available in all environments)
+_ORCHESTRATOR_AVAILABLE = False
+try:
+    # Check multiple possible paths
+    orchestrator_paths = [
+        "/Users/admin/dev2/sql2ai/libs/sql-orchestrator/src",
+        "/app/libs/sql-orchestrator/src",
+        os.path.join(os.path.dirname(__file__), "../../../../libs/sql-orchestrator/src"),
+    ]
+    for path in orchestrator_paths:
+        if os.path.exists(path):
+            sys.path.insert(0, path)
+            break
 
-from models import CheckCategory, CheckExecution, CheckStatus, DatabaseHealth
-from checks import CheckDefinition
+    from models import CheckCategory, CheckExecution, CheckStatus, DatabaseHealth
+    from checks import CheckDefinition
+    _ORCHESTRATOR_AVAILABLE = True
+except ImportError:
+    # Stub classes for when library is not available
+    CheckCategory = None
+    CheckExecution = None
+    CheckStatus = None
+    DatabaseHealth = None
+    CheckDefinition = None
 
 from sql2ai_api.dependencies.auth import (
     AuthenticatedUser,
@@ -20,6 +40,15 @@ from sql2ai_api.dependencies.auth import (
 )
 
 router = APIRouter()
+
+
+def _check_orchestrator_available():
+    """Raise 501 if orchestrator library is not available."""
+    if not _ORCHESTRATOR_AVAILABLE:
+        raise HTTPException(
+            status_code=501,
+            detail="SQL Orchestrator functionality not available in this deployment"
+        )
 
 
 # Request/Response models

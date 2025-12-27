@@ -11,9 +11,10 @@ from fastapi.responses import JSONResponse
 from sql2ai_api.config import settings
 from sql2ai_api.routers import (
     schemas, queries, migrations, telemetry, connections,
-    orchestrator, migrator, optimize, compliance,
-    writer, codereview, version, dashboard, billing
+    dashboard, billing
 )
+# Import optional routers (may not be available in all deployments)
+from sql2ai_api import routers as _routers
 from sql2ai_api.routers.webhooks import clerk_router
 from sql2ai_api.middleware.auth import create_auth_middleware
 from sql2ai_api.db.session import init_db, close_db
@@ -198,22 +199,30 @@ async def global_exception_handler(request: Request, exc: Exception):
     )
 
 
-# Include routers
+# Include core routers
 app.include_router(schemas.router, prefix="/api/schemas", tags=["schemas"])
 app.include_router(queries.router, prefix="/api/queries", tags=["queries"])
 app.include_router(migrations.router, prefix="/api/migrations", tags=["migrations"])
 app.include_router(telemetry.router, prefix="/api/telemetry", tags=["telemetry"])
 app.include_router(connections.router, prefix="/api/connections", tags=["connections"])
-app.include_router(orchestrator.router, prefix="/api/orchestrator", tags=["orchestrator"])
-app.include_router(migrator.router, prefix="/api/migrator", tags=["migrator"])
-app.include_router(optimize.router, prefix="/api/optimize", tags=["optimize"])
-app.include_router(compliance.router, prefix="/api/compliance", tags=["compliance"])
-app.include_router(writer.router, prefix="/api/writer", tags=["writer"])
-app.include_router(codereview.router, prefix="/api/codereview", tags=["codereview"])
-app.include_router(version.router, prefix="/api/version", tags=["version"])
 app.include_router(dashboard.router, prefix="/api/dashboard", tags=["dashboard"])
 app.include_router(billing.router, prefix="/api/billing", tags=["billing"])
 app.include_router(clerk_router, prefix="/api/webhooks", tags=["webhooks"])
+
+# Include optional routers (if available)
+_optional_router_config = [
+    ("orchestrator", "/api/orchestrator", ["orchestrator"]),
+    ("migrator", "/api/migrator", ["migrator"]),
+    ("optimize", "/api/optimize", ["optimize"]),
+    ("compliance", "/api/compliance", ["compliance"]),
+    ("writer", "/api/writer", ["writer"]),
+    ("codereview", "/api/codereview", ["codereview"]),
+    ("version", "/api/version", ["version"]),
+]
+for router_name, prefix, tags in _optional_router_config:
+    if hasattr(_routers, router_name):
+        router_module = getattr(_routers, router_name)
+        app.include_router(router_module.router, prefix=prefix, tags=tags)
 
 
 @app.get("/")
