@@ -112,6 +112,8 @@ class AuthMiddleware:
 
     async def __call__(self, request: Request, call_next):
         """Process request through authentication middleware."""
+        from fastapi.responses import JSONResponse
+
         # Skip auth for public routes
         public_routes = ["/", "/health", "/ready", "/api/docs", "/api/redoc", "/api/openapi.json"]
         if request.url.path in public_routes:
@@ -121,15 +123,25 @@ class AuthMiddleware:
         if request.url.path.startswith("/api/webhooks"):
             return await call_next(request)
 
+        # Skip auth for public billing endpoints
+        if request.url.path in ["/api/billing/pricing"]:
+            return await call_next(request)
+
         # Extract token from Authorization header
         auth_header = request.headers.get("Authorization")
         if not auth_header or not auth_header.startswith("Bearer "):
-            raise HTTPException(status_code=401, detail="Missing authorization header")
+            return JSONResponse(
+                status_code=401,
+                content={"detail": "Missing authorization header"}
+            )
 
         token = auth_header.replace("Bearer ", "")
 
         # Verify token and get user
-        user = await self.verify_token(token)
+        try:
+            user = await self.verify_token(token)
+        except HTTPException as e:
+            return JSONResponse(status_code=e.status_code, content={"detail": e.detail})
 
         # Attach user to request state
         request.state.user = user
